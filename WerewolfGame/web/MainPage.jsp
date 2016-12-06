@@ -4,6 +4,7 @@
     Author     : jpedr
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="ca.werewolfgame.beans.*"%>
 <!DOCTYPE html>
@@ -15,6 +16,22 @@
     <body>
         <h1>Main Page</h1>
         <h2>Welcome ${user.username}</h2>
-        
+        <div>
+            <table>
+                <c:forEach items="${chatHistory}" var="prevMessage">
+                    <tr>
+                        <td>${prevMessage.username}</td>
+                        <td>>></td>
+                        <td>${prevMessage.message}</td>
+                    </tr>
+                </c:forEach>
+            </table>
+            <form method="post" action="NewMessage">
+                Message: <input type="text" name="message" /><br>
+                <button type="submit" name="sendMessage" value="mainChat">Send</button><br>
+            </form>
+
+
+        </div>
     </body>
 </html>

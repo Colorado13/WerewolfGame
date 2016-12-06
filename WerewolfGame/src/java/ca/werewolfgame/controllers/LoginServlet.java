@@ -56,14 +56,16 @@ public class LoginServlet extends HttpServlet {
 
                 }
 
-                if (existingUser) 
-                {
+                if (existingUser) {
                     //TODO Redirect to index page with username already take message
                     response.sendRedirect("index.jsp");
-                } else 
-                {
+                } else {
                     dao.AddUser(user);
-                    response.sendRedirect("MainPage.jsp");
+                    session.setAttribute("user", user);
+                    
+                    ArrayList<Message> chatHistory = dao.getMainChat();
+                    request.setAttribute("chatHistory", chatHistory);
+                    request.getRequestDispatcher("MainPage.jsp").forward(request, response);
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
@@ -77,7 +79,10 @@ public class LoginServlet extends HttpServlet {
                         if (usersList.get(i).getPassword().equals(user.getPassword())) {
                             System.out.println("Login Successful");
                             session.setAttribute("user", user);
-                            response.sendRedirect("MainPage.jsp");
+
+                            ArrayList<Message> chatHistory = dao.getMainChat();
+                            request.setAttribute("chatHistory", chatHistory);
+                            request.getRequestDispatcher("MainPage.jsp").forward(request, response);
                         }
                     }
                 }

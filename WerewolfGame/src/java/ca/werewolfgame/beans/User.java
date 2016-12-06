@@ -5,10 +5,6 @@
  */
 package ca.werewolfgame.beans;
 
-/**
- *
- * @author jpedr
- */
 public class User implements java.io.Serializable {
 
     private String username;
