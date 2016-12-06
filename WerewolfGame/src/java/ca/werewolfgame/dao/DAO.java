@@ -27,7 +27,7 @@ public class DAO {
 
             String name = user.getUsername();
             String userPassword = user.getPassword();
-            String privilege = "member";
+            String privilege = "MEMBER";
 
             String preparedStatement = "INSERT INTO users VALUES (?,?,?,?,?)";
 
