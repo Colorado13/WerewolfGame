@@ -6,7 +6,5 @@ Make the Chat dynamic
 Create main game page (HTML+CSS)
 Create message when user already exists
 Create message when password is incorrect
-Create CreateGame Page
-Create CreateGame Servlet
 Add option to go to current games on main page
-
+Send back to create game page if less than 5 checkboxes are selected
