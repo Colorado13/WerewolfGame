@@ -1,0 +1,12 @@
+TODO List:
+Create Security Roles
+Create Header page
+Create Custom JSTL TAG
+Make the Chat dynamic
+Create main game page (HTML+CSS)
+Create message when user already exists
+Create message when password is incorrect
+Create CreateGame Page
+Create CreateGame Servlet
+Add option to go to current games on main page
+
