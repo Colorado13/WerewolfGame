@@ -16,6 +16,7 @@
     <body>
         <h1>Main Page</h1>
         <h2>Welcome ${user.username}</h2>
+        <h2>Your status is ${user.privilege}</h2>
         <div>
             <table>
                 <c:forEach items="${chatHistory}" var="prevMessage">
@@ -30,6 +31,12 @@
                 Message: <input type="text" name="message" /><br>
                 <button type="submit" name="sendMessage" value="mainChat">Send</button><br>
             </form>
+            
+            <c:if test="${user.privilege eq 'ADMIN'}">
+                <a href="CreateGame.jsp">Create Game</a>
+            </c:if>
+
+
 
 
         </div>

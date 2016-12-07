@@ -40,7 +40,7 @@ public class LoginServlet extends HttpServlet {
         User user = new User();
         user.setUsername(username);
         user.setPassword(password);
-        //user.setPrivilege("MEMBER");
+        user.setPrivilege("MEMBER");
 
         String option = request.getParameter("option");
 
@@ -78,6 +78,7 @@ public class LoginServlet extends HttpServlet {
                     if (usersList.get(i).getUsername().equals(user.getUsername())) {
                         if (usersList.get(i).getPassword().equals(user.getPassword())) {
                             System.out.println("Login Successful");
+                            user.setPrivilege(usersList.get(i).getPrivilege());
                             session.setAttribute("user", user);
 
                             ArrayList<Message> chatHistory = dao.getMainChat();
