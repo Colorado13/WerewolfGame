@@ -8,6 +8,7 @@ import ca.werewolfgame.beans.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -95,9 +96,9 @@ public class DAO {
             ps.setString(1, message.getUsername());
             ps.setString(2, message.getMessage());
             ps.setString(3, currentTime);
-            
+
             ps.executeUpdate();
-            
+
             con.close();
 
         } catch (ClassNotFoundException | SQLException e) {
@@ -156,9 +157,7 @@ public class DAO {
                 ps.setString(3, message.getMessage());
                 ps.setString(4, currentTime);
                 ps.executeUpdate();
-            }
-            else if (chat.equals("dead"))
-            {
+            } else if (chat.equals("dead")) {
                 String preparedStatement = "INSERT INTO " + game.getGameID() + "_chat_dead VALUES (?,?,?,?)";
                 PreparedStatement ps = con.prepareStatement(preparedStatement);
                 ps.setInt(1, game.getGameID());
@@ -166,10 +165,9 @@ public class DAO {
                 ps.setString(3, message.getMessage());
                 ps.setString(4, currentTime);
                 ps.executeUpdate();
-                
+
             }
-            
-            
+
             con.close();
 
         } catch (ClassNotFoundException | SQLException e) {
@@ -215,5 +213,86 @@ public class DAO {
 
     public ArrayList<Message> getDeadChat() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public int createGameID(int playerCount) throws SQLException, ClassNotFoundException {
+        int gameID = 0;
+        try {
+
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con;
+
+            con = DriverManager.getConnection(host + database, username, password);
+
+            String preparedStatement = "INSERT INTO games (numofplayers) VALUES (?)";
+
+            PreparedStatement ps = con.prepareStatement(preparedStatement);
+
+            ps.setInt(1, playerCount);
+            ps.executeUpdate();
+
+            String query = "SELECT MAX(gameID) FROM games";
+
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
+            rs.next();
+            gameID = Integer.parseInt((rs.getString(1)));
+
+            con.close();
+
+        } catch (ClassNotFoundException | SQLException e) {
+            System.out.println(e);
+        }
+
+        return gameID;
+    }
+
+    public void createGame(int gameID, String[] players, HashMap<String, String> gameSetup) {
+         try {
+
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con;
+
+            con = DriverManager.getConnection(host + database, username, password);
+            for(int i = 0; i < gameSetup.size(); i++)
+            {
+                String preparedStatement = "INSERT INTO gameid (gameid, playerid, role) VALUES (?,?,?)";
+                PreparedStatement ps = con.prepareStatement(preparedStatement);
+                ps.setInt(1, gameID);
+                ps.setString(2, players[i]);
+                ps.setString(3, gameSetup.get(players[i]));
+                ps.executeUpdate();
+                
+            }
+
+            con.close();
+
+        } catch (ClassNotFoundException | SQLException e) {
+            System.out.println(e);
+        }
+    }
+
+    public ArrayList<String> getPlayers() throws SQLException {
+                
+        ArrayList<String> userRoster = new ArrayList<>();
+
+        String query = "SELECT username FROM users";
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try (Connection con = DriverManager.getConnection(host + database, username, password)) {
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+                
+                userRoster.add(rs.getString(1));
+            }
+        }
+        Collections.sort(userRoster);
+        return userRoster;
     }
 }

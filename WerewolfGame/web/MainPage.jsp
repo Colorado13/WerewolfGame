@@ -29,16 +29,13 @@
             </table>
             <form method="post" action="NewMessage">
                 Message: <input type="text" name="message" /><br>
-                <button type="submit" name="sendMessage" value="mainChat">Send</button><br>
+                <input type="submit" name="sendMessage" value="Send"/><br>
             </form>
-            
             <c:if test="${user.privilege eq 'ADMIN'}">
-                <a href="CreateGame.jsp">Create Game</a>
+                <form method="post" action="PreCreateGame">
+                    <input type="submit" value="Create Game"/>
+                </form>
             </c:if>
-
-
-
-
         </div>
     </body>
 </html>

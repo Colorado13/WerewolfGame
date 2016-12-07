@@ -19,17 +19,19 @@
     <body>
         <h1>Create Game!</h1>
         <div>
-            <form method="post" action="CreateGameServlet">
+            <form method="post" action="CreateGameServlet" onsubmit="selectAll">
                 <div>
                     Name: <input type="text" name="GameName" /><br>
                     Number of Players: <input type="number" id="playerCount" name="playerCount" /><br>
                     <input type="button" value="Next" onclick="SelectPlayers()"/><br>
                 </div>
-                <div id="PlayerSelection">
+                <div id="PlayerSelection" style="display: none;">
                     <h2>Select the Players</h2>
-                    
-
+                    <c:forEach items="${playerRoster}" var="playerName">
+                        <input type="checkbox" name="player" value="${playerName}">${playerName}<br>
+                    </c:forEach>
                 </div>
+                <button type="submit">Create Game!</button><br>
             </form>
         </div>
     </body>
@@ -39,22 +41,13 @@
 <script type="text/javascript">
 
     var players = document.getElementById("PlayerSelection");
-
-    players.style.display = 'none';
+    var playerCount = 5;
 
     function SelectPlayers()
     {
         players.style.display = "block";
-        
-
-        var a = parseInt(document.getElementById("playerCount").value);
-        var ch = document.getElementById("PlayerSelection");
-
-        for (i = 0; i < a; i++) {
-            var input = document.createElement("input");
-            ch.appendChild(input);
-        }
-
     }
+
+
 
 </script>
