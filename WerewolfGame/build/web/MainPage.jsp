@@ -31,6 +31,9 @@
                 Message: <input type="text" name="message" /><br>
                 <input type="submit" name="sendMessage" value="Send"/><br>
             </form>
+            <form method="post" action="MyGames">
+                <input type="submit" value="My Games"/><br>
+            </form>
             <c:if test="${user.privilege eq 'ADMIN'}">
                 <form method="post" action="PreCreateGame">
                     <input type="submit" value="Create Game"/>

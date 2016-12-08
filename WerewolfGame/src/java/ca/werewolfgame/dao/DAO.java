@@ -120,7 +120,7 @@ public class DAO {
 
             con = DriverManager.getConnection(host + database, username, password);
 
-            String preparedStatement = "INSERT INTO " + game.getGameID() + "_chat VALUES (?,?,?)";
+            String preparedStatement = "INSERT INTO gamechat VALUES (?,?,?)";
             PreparedStatement ps = con.prepareStatement(preparedStatement);
             ps.setInt(1, game.getGameID());
             ps.setString(2, message.getUsername());
@@ -150,7 +150,7 @@ public class DAO {
             con = DriverManager.getConnection(host + database, username, password);
 
             if (chat.equals("werewolf")) {
-                String preparedStatement = "INSERT INTO " + game.getGameID() + "_chat_werewolf VALUES (?,?,?,?)";
+                String preparedStatement = "INSERT INTO werewolfchat VALUES (?,?,?,?)";
                 PreparedStatement ps = con.prepareStatement(preparedStatement);
                 ps.setInt(1, game.getGameID());
                 ps.setString(2, message.getUsername());
@@ -158,7 +158,7 @@ public class DAO {
                 ps.setString(4, currentTime);
                 ps.executeUpdate();
             } else if (chat.equals("dead")) {
-                String preparedStatement = "INSERT INTO " + game.getGameID() + "_chat_dead VALUES (?,?,?,?)";
+                String preparedStatement = "INSERT INTO deadchatdead VALUES (?,?,?,?)";
                 PreparedStatement ps = con.prepareStatement(preparedStatement);
                 ps.setInt(1, game.getGameID());
                 ps.setString(2, message.getUsername());
@@ -248,21 +248,20 @@ public class DAO {
     }
 
     public void createGame(int gameID, String[] players, HashMap<String, String> gameSetup) {
-         try {
+        try {
 
             Class.forName("com.mysql.jdbc.Driver");
             Connection con;
 
             con = DriverManager.getConnection(host + database, username, password);
-            for(int i = 0; i < gameSetup.size(); i++)
-            {
+            for (int i = 0; i < gameSetup.size(); i++) {
                 String preparedStatement = "INSERT INTO gameid (gameid, playerid, role) VALUES (?,?,?)";
                 PreparedStatement ps = con.prepareStatement(preparedStatement);
                 ps.setInt(1, gameID);
                 ps.setString(2, players[i]);
                 ps.setString(3, gameSetup.get(players[i]));
                 ps.executeUpdate();
-                
+
             }
 
             con.close();
@@ -273,7 +272,7 @@ public class DAO {
     }
 
     public ArrayList<String> getPlayers() throws SQLException {
-                
+
         ArrayList<String> userRoster = new ArrayList<>();
 
         String query = "SELECT username FROM users";
@@ -288,11 +287,84 @@ public class DAO {
             ResultSet rs = st.executeQuery(query);
 
             while (rs.next()) {
-                
+
                 userRoster.add(rs.getString(1));
             }
         }
         Collections.sort(userRoster);
         return userRoster;
+    }
+
+    public ArrayList<Integer> getMyGames(String playerId) throws SQLException {
+
+        ArrayList<Integer> myGames = new ArrayList<>();
+
+        String query = "SELECT gameid from gameid WHERE playerid like '" + playerId + "'";
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try (Connection con = DriverManager.getConnection(host + database, username, password)) {
+
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            int i = 0;
+
+            while (rs.next()) {
+                myGames.add(Integer.parseInt(rs.getString(1)));
+
+            }
+        }
+
+        return myGames;
+    }
+
+    public String getRole(int gameId, String playerId) throws SQLException {
+        String role;
+
+        String query = "SELECT role from gameid WHERE playerid like '" + playerId + "' AND gameid LIKE '" + gameId + "'";
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try (Connection con = DriverManager.getConnection(host + database, username, password)) {
+
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            rs.next();
+            role = rs.getString(1);
+
+        }
+        return role;
+    }
+
+    
+
+    public String getStatus(int gameId, String playerId) throws SQLException {
+        String status;
+
+        String query = "SELECT status from gameid WHERE playerid like '" + playerId + "' AND gameid LIKE '" + gameId + "'";
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try (Connection con = DriverManager.getConnection(host + database, username, password)) {
+
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            rs.next();
+            status = rs.getString(1);
+
+        }
+        return status;
     }
 }
