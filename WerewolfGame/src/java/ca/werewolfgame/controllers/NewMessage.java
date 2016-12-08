@@ -35,60 +35,104 @@ public class NewMessage extends HttpServlet {
         User user = (User) session.getAttribute("user");
         String text = request.getParameter("message");
         String chat = request.getParameter("sendMessage");
+        Message message = new Message(user.getUsername(), text);
+
+        ArrayList<Message> chatHistory;
+        ArrayList<Message> gameChatHistory;
+        ArrayList<Message> wwChatHistory;
+        ArrayList<Message> deadChatHistory;
         
         DAO dao = new DAO();
 
-        Message message = new Message(user.getUsername(), text);
-
+        //System.out.print("chat:" + chat);
         switch (chat) {
             case "mainChat":
                 dao.AddMessage(message);
-                ArrayList<Message> chatHistory;
+
                 try {
                     chatHistory = dao.getMainChat();
                     request.setAttribute("chatHistory", chatHistory);
                     request.getRequestDispatcher("MainPage.jsp").forward(request, response);
                 } catch (SQLException ex) {
                     Logger.getLogger(NewMessage.class.getName()).log(Level.SEVERE, null, ex);
-                }       break;
-            case "gameMessage":
-                {
-                    //Get Game info...
-                    Game game = new Game();
-                    dao.AddMessage(message, game);
-                    ArrayList<Message> gameChatHistory;
-                    gameChatHistory = dao.getGameChat();
+                }
+                break;
+
+            case "gameMessage": {
+
+                String playerId = user.getUsername();
+                int gameId = Integer.parseInt(request.getParameter("gameId"));                
+                String role = request.getParameter("role");
+                String status = request.getParameter("status");
+                PlayerInstance playerInstance = new PlayerInstance(playerId, role, status, gameId);
+                
+
+                dao.AddMessage(message, gameId);
+
+                try {
+                    gameChatHistory = dao.getGameChat(gameId);
                     request.setAttribute("gameChatHistory", gameChatHistory);
+                    request.setAttribute("playerInstance", playerInstance);
                     request.getRequestDispatcher("GamePage.jsp").forward(request, response);
-                    break;
+
+                } catch (SQLException ex) {
+                    Logger.getLogger(NewMessage.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            case "wwMessage":
-                {
-                    //Get Game info...
-                    Game game = new Game();
-                    dao.AddMessage(message, game, "werewolf");
-                    ArrayList<Message> wwChatHistory;
-                    wwChatHistory = dao.getWwChat();
-                    request.setAttribute("gameChatHistory", wwChatHistory);
+                break;
+
+            }
+            case "wwMessage": {
+
+                String playerId = user.getUsername();                
+                int gameId = Integer.parseInt(request.getParameter("gameId"));                
+                String role = request.getParameter("role");
+                String status = request.getParameter("status");                
+                PlayerInstance playerInstance = new PlayerInstance(playerId, role, status, gameId);
+                
+                System.out.println("Werewolf message in game: " + gameId);
+                dao.AddMessage(message, gameId, "werewolf");
+
+                try {
+                    wwChatHistory = dao.getWwChat(gameId);
+                    gameChatHistory = dao.getGameChat(gameId);
+                    request.setAttribute("gameChatHistory", gameChatHistory);
+                    request.setAttribute("wwChatHistory", wwChatHistory);
+                    request.setAttribute("playerInstance", playerInstance);
                     request.getRequestDispatcher("GamePage.jsp").forward(request, response);
-                    break;
+
+                } catch (SQLException ex) {
+                    Logger.getLogger(NewMessage.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            case "deadMessage":
-                {
-                    //Get Game info...
-                    Game game = new Game();
-                    dao.AddMessage(message, game, "deadChat");
-                    ArrayList<Message> deadChatHistory;
-                    deadChatHistory = dao.getDeadChat();
-                    request.setAttribute("gameChatHistory", deadChatHistory);
+                break;
+
+            }
+            case "deadMessage": {
+
+                String playerId = user.getUsername();                
+                int gameId = Integer.parseInt(request.getParameter("gameId"));                
+                String role = request.getParameter("role");
+                String status = request.getParameter("status");                
+                PlayerInstance playerInstance = new PlayerInstance(playerId, role, status, gameId);
+                
+                dao.AddMessage(message, gameId, "deadChat");
+
+                try {
+                    deadChatHistory = dao.getDeadChat(gameId);
+                    gameChatHistory = dao.getGameChat(gameId);
+                    request.setAttribute("gameChatHistory", gameChatHistory);
+                    request.setAttribute("deadChatHistory", deadChatHistory);
+                    request.setAttribute("playerInstance", playerInstance);
                     request.getRequestDispatcher("GamePage.jsp").forward(request, response);
-                    break;
+
+                } catch (SQLException ex) {
+                    Logger.getLogger(NewMessage.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                break;
+
+            }
             default:
                 break;
         }
-
-        
 
     }
 

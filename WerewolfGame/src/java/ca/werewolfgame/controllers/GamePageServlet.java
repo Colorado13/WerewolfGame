@@ -10,6 +10,7 @@ import ca.werewolfgame.dao.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -43,6 +44,18 @@ public class GamePageServlet extends HttpServlet {
             playerInstance.setRole(dao.getRole(gameId, playerId));
             playerInstance.setStatus(dao.getStatus(gameId, playerId));
             playerInstance.setGameId(gameId);
+
+            ArrayList<Message> gameChatHistory = dao.getGameChat(gameId);
+            request.setAttribute("gameChatHistory", gameChatHistory);
+
+            if (playerInstance.getStatus().equals("DEAD")) {
+                ArrayList<Message> deadChatHistory = dao.getDeadChat(gameId);
+                request.setAttribute("deadChatHistory", deadChatHistory);
+            } 
+            else if (playerInstance.getRole().equals("werewolf")) {
+                ArrayList<Message> wwChatHistory = dao.getWwChat(gameId);
+                request.setAttribute("wwChatHistory", wwChatHistory);
+            }
 
             request.setAttribute("playerInstance", playerInstance);
             request.getRequestDispatcher("GamePage.jsp").forward(request, response);

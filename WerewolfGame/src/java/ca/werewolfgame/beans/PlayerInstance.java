@@ -18,6 +18,13 @@ public class PlayerInstance implements java.io.Serializable{
     public PlayerInstance() {
     }
 
+    public PlayerInstance(String playerId, String role, String status, int gameId) {
+        this.playerId = playerId;
+        this.role = role;
+        this.status = status;
+        this.gameId = gameId;
+    }
+
     public String getPlayerId() {
         return playerId;
     }

@@ -33,6 +33,9 @@
             <c:if test="${playerInstance.status == 'ALIVE'}">
                 <form method="post" action="NewMessage">
                     Message: <input type="text" name="message" /><br>
+                    <input type="hidden" name="gameId" value="${playerInstance.gameId}"/>
+                    <input type="hidden" name="role" value="${playerInstance.role}" />
+                    <input type="hidden" name="status" value="${playerInstance.status}" />
                     <button type="submit" name="sendMessage" value="gameMessage">Send</button><br>
                 </form>
             </c:if>
@@ -51,6 +54,9 @@
                         </table>
                         <form method="post" action="NewMessage">
                             Message: <input type="text" name="message" /><br>
+                            <input type="hidden" name="gameId" value="${playerInstance.gameId}"/>
+                            <input type="hidden" name="role" value="${playerInstance.role}" />
+                            <input type="hidden" name="status" value="${playerInstance.status}" />
                             <button type="submit" name="sendMessage" value="deadMessage">Send</button><br>
                         </form>
                     </div>
@@ -70,6 +76,9 @@
                             </table>
                             <form method="post" action="NewMessage">
                                 Message: <input type="text" name="message" /><br>
+                                <input type="hidden" name="gameId" value="${playerInstance.gameId}"/>
+                                <input type="hidden" name="role" value="${playerInstance.role}" />
+                                <input type="hidden" name="status" value="${playerInstance.status}" />
                                 <button type="submit" name="sendMessage" value="wwMessage">Send</button><br>
                             </form>
                         </div>

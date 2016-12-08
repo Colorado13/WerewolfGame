@@ -72,8 +72,11 @@ public class DAO {
                 user.setWins(Integer.parseInt(rs.getString(5)));
 
                 usersList.add(user);
+
             }
+            con.close();
         }
+
         return usersList;
     }
 
@@ -106,7 +109,7 @@ public class DAO {
         }
     }
 
-    public void AddMessage(Message message, Game game) {
+    public void AddMessage(Message message, int gameId) {
         try {
 
             java.util.Date dt = new java.util.Date();
@@ -120,9 +123,9 @@ public class DAO {
 
             con = DriverManager.getConnection(host + database, username, password);
 
-            String preparedStatement = "INSERT INTO gamechat VALUES (?,?,?)";
+            String preparedStatement = "INSERT INTO gamechat VALUES (?,?,?,?)";
             PreparedStatement ps = con.prepareStatement(preparedStatement);
-            ps.setInt(1, game.getGameID());
+            ps.setInt(1, gameId);
             ps.setString(2, message.getUsername());
             ps.setString(3, message.getMessage());
             ps.setString(4, currentTime);
@@ -135,7 +138,7 @@ public class DAO {
         }
     }
 
-    public void AddMessage(Message message, Game game, String chat) {
+    public void AddMessage(Message message, int gameId, String chat) {
         try {
 
             java.util.Date dt = new java.util.Date();
@@ -152,15 +155,16 @@ public class DAO {
             if (chat.equals("werewolf")) {
                 String preparedStatement = "INSERT INTO werewolfchat VALUES (?,?,?,?)";
                 PreparedStatement ps = con.prepareStatement(preparedStatement);
-                ps.setInt(1, game.getGameID());
+                ps.setInt(1, gameId);
                 ps.setString(2, message.getUsername());
                 ps.setString(3, message.getMessage());
                 ps.setString(4, currentTime);
                 ps.executeUpdate();
+
             } else if (chat.equals("dead")) {
-                String preparedStatement = "INSERT INTO deadchatdead VALUES (?,?,?,?)";
+                String preparedStatement = "INSERT INTO deadchat VALUES (?,?,?,?)";
                 PreparedStatement ps = con.prepareStatement(preparedStatement);
-                ps.setInt(1, game.getGameID());
+                ps.setInt(1, gameId);
                 ps.setString(2, message.getUsername());
                 ps.setString(3, message.getMessage());
                 ps.setString(4, currentTime);
@@ -198,21 +202,95 @@ public class DAO {
 
                 chatHistory.add(message);
             }
+            con.close();
+        }
+        Collections.reverse(chatHistory);
+
+        return chatHistory;
+    }
+
+    public ArrayList<Message> getGameChat(int gameId) throws SQLException {
+        int chatHistorySize = 10;
+        ArrayList<Message> chatHistory = new ArrayList<>();
+
+        String query = "SELECT playerid, message FROM gamechat WHERE gameid = '" + gameId + "' order by thetime desc limit " + chatHistorySize;
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try (Connection con = DriverManager.getConnection(host + database, username, password)) {
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+                Message message = new Message();
+                message.setUsername(rs.getString(1));
+                message.setMessage(rs.getString(2));
+
+                chatHistory.add(message);
+            }
+            con.close();
         }
         Collections.reverse(chatHistory);
         return chatHistory;
     }
 
-    public ArrayList<Message> getGameChat() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ArrayList<Message> getWwChat(int gameId) throws SQLException {
+        int chatHistorySize = 10;
+        ArrayList<Message> wwChatHistory = new ArrayList<>();
+
+        String query = "SELECT playerid, message FROM werewolfchat WHERE gameid = '" + gameId + "' order by thetime desc limit " + chatHistorySize;
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try (Connection con = DriverManager.getConnection(host + database, username, password)) {
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+                Message message = new Message();
+                message.setUsername(rs.getString(1));
+                message.setMessage(rs.getString(2));
+
+                wwChatHistory.add(message);
+            }
+            con.close();
+        }
+        Collections.reverse(wwChatHistory);
+        return wwChatHistory;
     }
 
-    public ArrayList<Message> getWwChat() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public ArrayList<Message> getDeadChat(int gameId) throws SQLException {
+        int chatHistorySize = 10;
+        ArrayList<Message> deadChatHistory = new ArrayList<>();
 
-    public ArrayList<Message> getDeadChat() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String query = "SELECT playerid, message FROM deadchat WHERE gameid = '" + gameId + "' order by thetime desc limit " + chatHistorySize;
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try (Connection con = DriverManager.getConnection(host + database, username, password)) {
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+                Message message = new Message();
+                message.setUsername(rs.getString(1));
+                message.setMessage(rs.getString(2));
+
+                deadChatHistory.add(message);
+            }
+            con.close();
+        }
+        Collections.reverse(deadChatHistory);
+        return deadChatHistory;
     }
 
     public int createGameID(int playerCount) throws SQLException, ClassNotFoundException {
@@ -290,6 +368,7 @@ public class DAO {
 
                 userRoster.add(rs.getString(1));
             }
+            con.close();
         }
         Collections.sort(userRoster);
         return userRoster;
@@ -317,6 +396,7 @@ public class DAO {
                 myGames.add(Integer.parseInt(rs.getString(1)));
 
             }
+            con.close();
         }
 
         return myGames;
@@ -339,12 +419,11 @@ public class DAO {
 
             rs.next();
             role = rs.getString(1);
+            con.close();
 
         }
         return role;
     }
-
-    
 
     public String getStatus(int gameId, String playerId) throws SQLException {
         String status;
@@ -363,6 +442,7 @@ public class DAO {
 
             rs.next();
             status = rs.getString(1);
+            con.close();
 
         }
         return status;

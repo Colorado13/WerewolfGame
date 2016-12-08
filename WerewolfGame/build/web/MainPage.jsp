@@ -29,7 +29,7 @@
             </table>
             <form method="post" action="NewMessage">
                 Message: <input type="text" name="message" /><br>
-                <input type="submit" name="sendMessage" value="Send"/><br>
+                <button type="submit" name="sendMessage" value="mainChat">Send<br></button>
             </form>
             <form method="post" action="MyGames">
                 <input type="submit" value="My Games"/><br>

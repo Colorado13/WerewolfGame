@@ -77,7 +77,7 @@ public class LoginServlet extends HttpServlet {
                 for (int i = 0; i < usersList.size(); i++) {
                     if (usersList.get(i).getUsername().equals(user.getUsername())) {
                         if (usersList.get(i).getPassword().equals(user.getPassword())) {
-                            System.out.println("Login Successful");
+                            //System.out.println("Login Successful");
                             user.setPrivilege(usersList.get(i).getPrivilege());
                             session.setAttribute("user", user);
 
