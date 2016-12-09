@@ -1,10 +1,7 @@
 package ca.werewolfgame.dao;
 
-/**
- *
- * @author
- */
 import ca.werewolfgame.beans.*;
+import ca.werewolfgame.logic.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -83,22 +80,16 @@ public class DAO {
     public void AddMessage(Message message) {
         try {
 
-            java.util.Date dt = new java.util.Date();
-
-            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-            String currentTime = sdf.format(dt);
-
             Class.forName("com.mysql.jdbc.Driver");
             Connection con;
 
             con = DriverManager.getConnection(host + database, username, password);
 
-            String preparedStatement = "INSERT INTO mainchat VALUES (?,?,?)";
+            String preparedStatement = "INSERT INTO mainchat VALUES (?,?,NOW())";
             PreparedStatement ps = con.prepareStatement(preparedStatement);
             ps.setString(1, message.getUsername());
             ps.setString(2, message.getMessage());
-            ps.setString(3, currentTime);
+            //ps.setString(3, currentTime);
 
             ps.executeUpdate();
 
@@ -123,12 +114,12 @@ public class DAO {
 
             con = DriverManager.getConnection(host + database, username, password);
 
-            String preparedStatement = "INSERT INTO gamechat VALUES (?,?,?,?)";
+            String preparedStatement = "INSERT INTO gamechat VALUES (?,?,?,NOW())";
             PreparedStatement ps = con.prepareStatement(preparedStatement);
             ps.setInt(1, gameId);
             ps.setString(2, message.getUsername());
             ps.setString(3, message.getMessage());
-            ps.setString(4, currentTime);
+            //ps.setString(4, currentTime);
 
             ps.executeUpdate();
             con.close();
@@ -153,12 +144,12 @@ public class DAO {
             con = DriverManager.getConnection(host + database, username, password);
 
             if (chat.equals("werewolf")) {
-                String preparedStatement = "INSERT INTO werewolfchat VALUES (?,?,?,?)";
+                String preparedStatement = "INSERT INTO werewolfchat VALUES (?,?,?,NOW())";
                 PreparedStatement ps = con.prepareStatement(preparedStatement);
                 ps.setInt(1, gameId);
                 ps.setString(2, message.getUsername());
                 ps.setString(3, message.getMessage());
-                ps.setString(4, currentTime);
+                //ps.setString(4, currentTime);
                 ps.executeUpdate();
 
             } else if (chat.equals("deadChat")) {
@@ -181,7 +172,7 @@ public class DAO {
 
     public ArrayList<Message> getMainChat() throws SQLException {
         //maybe have a variable somewhere that sets this (web.xml?)
-        int chatHistorySize = 10;
+        int chatHistorySize = GameParameters.mainChatHistorySize;
         ArrayList<Message> chatHistory = new ArrayList<>();
 
         String query = "SELECT username, message FROM mainchat order by thetime desc limit " + chatHistorySize;
@@ -210,7 +201,7 @@ public class DAO {
     }
 
     public ArrayList<Message> getGameChat(int gameId) throws SQLException {
-        int chatHistorySize = 10;
+        int chatHistorySize = GameParameters.gameChatHistorySize;
         ArrayList<Message> chatHistory = new ArrayList<>();
 
         String query = "SELECT playerid, message FROM gamechat WHERE gameid = '" + gameId + "' order by thetime desc limit " + chatHistorySize;
@@ -238,7 +229,7 @@ public class DAO {
     }
 
     public ArrayList<Message> getWwChat(int gameId) throws SQLException {
-        int chatHistorySize = 10;
+        int chatHistorySize = GameParameters.wwChatHistorySize;
         ArrayList<Message> wwChatHistory = new ArrayList<>();
 
         String query = "SELECT playerid, message FROM werewolfchat WHERE gameid = '" + gameId + "' order by thetime desc limit " + chatHistorySize;
@@ -266,7 +257,7 @@ public class DAO {
     }
 
     public ArrayList<Message> getDeadChat(int gameId) throws SQLException {
-        int chatHistorySize = 10;
+        int chatHistorySize = GameParameters.deadChatHistorySize;
         ArrayList<Message> deadChatHistory = new ArrayList<>();
 
         String query = "SELECT playerid, message FROM deadchat WHERE gameid = '" + gameId + "' order by thetime desc limit " + chatHistorySize;
@@ -373,12 +364,12 @@ public class DAO {
         Collections.sort(userRoster);
         return userRoster;
     }
-    
+
     public ArrayList<String> getPlayers(int gameId) throws SQLException {
 
         ArrayList<String> userRoster = new ArrayList<>();
 
-        String query = "SELECT playerid FROM gameid WHERE gameid = " + gameId + " AND status LIKE 'ALIVE'" ;
+        String query = "SELECT playerid FROM gameid WHERE gameid = " + gameId + " AND status LIKE 'ALIVE'";
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -398,12 +389,12 @@ public class DAO {
         Collections.sort(userRoster);
         return userRoster;
     }
-    
+
     public ArrayList<String> getPlayers(int gameId, String villagers) throws SQLException {
 
         ArrayList<String> userRoster = new ArrayList<>();
 
-        String query = "SELECT playerid FROM gameid WHERE gameid = " + gameId + " AND status LIKE 'ALIVE' AND role NOT LIKE 'werewolf'" ;
+        String query = "SELECT playerid FROM gameid WHERE gameid = " + gameId + " AND status LIKE 'ALIVE' AND role NOT LIKE 'werewolf'";
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -497,6 +488,7 @@ public class DAO {
         }
         return status;
     }
+
     public int getCurrentRound(int gameId) throws SQLException {
         int currentRound;
 
@@ -635,4 +627,74 @@ public class DAO {
         return currentIndex;
     }
 
+    public Timestamp getStartTime(int gameId) throws SQLException {
+
+        java.sql.Timestamp startTime;
+
+        String query = "SELECT MIN(thetime) FROM gamechat WHERE gameid = " + gameId;
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try (Connection con = DriverManager.getConnection(host + database, username, password)) {
+
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            rs.next();
+
+            startTime = rs.getTimestamp(1);
+
+            con.close();
+
+        }
+        return startTime;
+    }
+
+    public long getElapsedTime(int gameId) throws SQLException {
+
+        DAO dao = new DAO();
+
+        java.sql.Timestamp startTime = dao.getStartTime(gameId);
+        java.sql.Timestamp currentTime;
+
+        String query = "SELECT NOW()";
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try (Connection con = DriverManager.getConnection(host + database, username, password)) {
+
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            rs.next();
+
+            currentTime = rs.getTimestamp(1);
+
+            con.close();
+
+        }
+        long milliseconds1 = startTime.getTime();
+        long milliseconds2 = currentTime.getTime();
+
+        long diff = milliseconds2 - milliseconds1;
+        long diffSeconds = diff / 1000;
+        
+        //long diffMinutes = diff / (60 * 1000);
+        //long diffHours = diff / (60 * 60 * 1000);
+        //long diffDays = diff / (24 * 60 * 60 * 1000);
+        /*
+        System.out.println("Seconds:" + diffSeconds);
+        System.out.println("Minutes:" + diffMinutes);
+        System.out.println("Hours:" + diffHours);
+        System.out.println("Days:" + diffDays);
+         */
+
+        return diffSeconds;
+    }
 }
