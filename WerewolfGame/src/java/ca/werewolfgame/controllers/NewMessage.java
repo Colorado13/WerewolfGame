@@ -49,7 +49,7 @@ public class NewMessage extends HttpServlet {
                 try {
                     chatHistory = dao.getMainChat();
                     request.setAttribute("chatHistory", chatHistory);
-                    request.getRequestDispatcher("GoToGamePage").forward(request, response);
+                    request.getRequestDispatcher("MainPage.jsp").forward(request, response);
                 } catch (SQLException ex) {
                     Logger.getLogger(NewMessage.class.getName()).log(Level.SEVERE, null, ex);
                 }
