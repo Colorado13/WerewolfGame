@@ -161,7 +161,7 @@ public class DAO {
                 ps.setString(4, currentTime);
                 ps.executeUpdate();
 
-            } else if (chat.equals("dead")) {
+            } else if (chat.equals("deadChat")) {
                 String preparedStatement = "INSERT INTO deadchat VALUES (?,?,?,?)";
                 PreparedStatement ps = con.prepareStatement(preparedStatement);
                 ps.setInt(1, gameId);
