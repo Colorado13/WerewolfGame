@@ -18,9 +18,7 @@
         <h2>Your status is ${user.privilege}</h2>
         <form method="post" action="GamePageServlet">
             <c:forEach items="${myGames}" var="game">
-
                 <input type="submit" name="game" value="${game}"/><br>
-
             </c:forEach>
         </form>
     </body>
