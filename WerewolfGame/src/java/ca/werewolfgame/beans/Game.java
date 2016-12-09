@@ -12,6 +12,7 @@ package ca.werewolfgame.beans;
 public class Game implements java.io.Serializable{
     private int gameID;
     private int playerCount;
+    private int currentRound;
 
     public Game() {
     }
@@ -19,6 +20,7 @@ public class Game implements java.io.Serializable{
     public Game(int gameID, int playerCount) {
         this.gameID = gameID;
         this.playerCount = playerCount;
+        this.currentRound = 1;
     }
 
     public int getGameID() {
@@ -35,6 +37,14 @@ public class Game implements java.io.Serializable{
 
     public void setPlayerCount(int playerCount) {
         this.playerCount = playerCount;
+    }
+    
+    public int getCurrentRound() {
+        return currentRound;
+    }
+
+   public void setCurrentRound(int currentRound) {
+        this.currentRound = currentRound;
     }
     
     
