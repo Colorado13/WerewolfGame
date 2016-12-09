@@ -38,9 +38,7 @@ public class CreateGameServlet extends HttpServlet {
             
             
             
-        } catch (SQLException ex) {
-            Logger.getLogger(CreateGameServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(CreateGameServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
         
