@@ -1,0 +1,76 @@
+CREATE database java3final;
+USE java3final;
+CREATE TABLE users
+( username VARCHAR(30)
+, password VARCHAR(30)
+, privilege VARCHAR(6)
+, nummatches DECIMAL(4,0)
+, numwins DECIMAL(4,0)
+, CONSTRAINT pkusers PRIMARY KEY (username)
+, CONSTRAINT ckprivilege CHECK (privilege IN ('ADMIN','MEMBER'))
+);
+CREATE TABLE games
+( gameid TINYINT NOT NULL AUTO_INCREMENT
+, numofplayers DECIMAL(2,0)
+, CONSTRAINT pkgames PRIMARY KEY (gameid)
+);
+CREATE TABLE mainchat
+( username VARCHAR(30)
+, message VARCHAR(150)
+, thetime DATETIME
+, CONSTRAINT playerchatfk FOREIGN KEY (username) REFERENCES users (username)
+);
+
+INSERT INTO users(username, password, privilege, nummatches, numwins)
+  VALUES ('Joao', 'root', 'ADMIN', 0, 0)
+;
+INSERT INTO users(username, password, privilege, nummatches, numwins)
+  VALUES ('Jamie', 'root', 'ADMIN', 0, 0)
+;
+
+CREATE TABLE gameid (
+gameid TINYINT,
+playerid VARCHAR(30),
+role VARCHAR(10),
+status VARCHAR(5) DEFAULT "ALIVE",
+CONSTRAINT gamefk FOREIGN KEY (gameid) REFERENCES games (gameid),
+CONSTRAINT playerfk FOREIGN KEY (playerid) REFERENCES users (username)
+);
+
+CREATE TABLE gamechat (
+gameid TINYINT,
+playerid VARCHAR(30),
+message VARCHAR(150),
+thetime DATETIME,
+CONSTRAINT gamechatfk FOREIGN KEY (gameid) REFERENCES games (gameid),
+CONSTRAINT playergamechatfk FOREIGN KEY (playerid) REFERENCES users (username)
+);
+
+CREATE TABLE werewolfchat (
+gameid TINYINT,
+playerid VARCHAR(30),
+message VARCHAR(150),
+thetime DATETIME,
+CONSTRAINT wwchatfk FOREIGN KEY (gameid) REFERENCES games (gameid),
+CONSTRAINT wwgamechatfk FOREIGN KEY (playerid) REFERENCES users (username)
+);
+
+CREATE TABLE deadchat (
+gameid TINYINT,
+playerid VARCHAR(30),
+message VARCHAR(150),
+thetime DATETIME,
+CONSTRAINT deadchatfk FOREIGN KEY (gameid) REFERENCES games (gameid),
+CONSTRAINT deadgamechatfk FOREIGN KEY (playerid) REFERENCES users (username)
+);
+
+CREATE TABLE votes (
+gameid TINYINT,
+votingid VARCHAR(30),
+votedid VARCHAR(30),
+gameround TINYINT,
+voteindex SMALLINT,
+CONSTRAINT votegameidfk FOREIGN KEY (gameid) REFERENCES games (gameid),
+CONSTRAINT votingplayerfk FOREIGN KEY (votingid) REFERENCES users (username),
+CONSTRAINT votedplayerfk FOREIGN KEY (votedid) REFERENCES users (username)
+);
