@@ -5,9 +5,8 @@
  */
 package ca.werewolfgame.controllers;
 
-import ca.werewolfgame.beans.Message;
-import ca.werewolfgame.beans.PlayerInstance;
-import ca.werewolfgame.dao.DAO;
+import ca.werewolfgame.beans.*;
+import ca.werewolfgame.dao.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
