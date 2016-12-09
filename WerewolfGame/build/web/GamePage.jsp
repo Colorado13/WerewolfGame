@@ -34,6 +34,7 @@
         <h1>Game Page</h1>
         <h2>Welcome ${user.username}</h2>
         <h3>This is Game ${playerInstance.gameId}</h3>
+        <h3>Current round is ${playerInstance.currentRound}<h3>
         <h3>In this game you are a ${playerInstance.role}</h3>
         <h3>You are currently ${playerInstance.status}</h3>
         <div class="GameChat">
@@ -47,6 +48,7 @@
                     <input type="hidden" name="gameId" value="${playerInstance.gameId}"/>
                     <input type="hidden" name="role" value="${playerInstance.role}" />
                     <input type="hidden" name="status" value="${playerInstance.status}" />
+                    <input type="hidden" name="currentRound" value="${playerInstance.currentRound}"/>
                     <button type="submit" name="sendMessage" value="gameMessage">Send</button><br>
                 </form>
             </c:if>
@@ -61,6 +63,7 @@
                             <input type="hidden" name="gameId" value="${playerInstance.gameId}"/>
                             <input type="hidden" name="role" value="${playerInstance.role}" />
                             <input type="hidden" name="status" value="${playerInstance.status}" />
+                            <input type="hidden" name="currentRound" value="${playerInstance.currentRound}"/>
                             <button type="submit" name="sendMessage" value="deadMessage">Send</button><br>
                         </form>
                     </div>
@@ -76,6 +79,7 @@
                                 <input type="hidden" name="gameId" value="${playerInstance.gameId}"/>
                                 <input type="hidden" name="role" value="${playerInstance.role}" />
                                 <input type="hidden" name="status" value="${playerInstance.status}" />
+                                <input type="hidden" name="currentRound" value="${playerInstance.currentRound}"/>
                                 <button type="submit" name="sendMessage" value="wwMessage">Send</button><br>
                             </form>
                         </div>
