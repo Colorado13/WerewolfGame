@@ -65,11 +65,22 @@ CONSTRAINT deadchatfk FOREIGN KEY (gameid) REFERENCES games (gameid),
 CONSTRAINT deadgamechatfk FOREIGN KEY (playerid) REFERENCES users (username)
 );
 
+CREATE TABLE killorder (
+gameid TINYINT,
+wwid VARCHAR(30),
+victimid VARCHAR(30),
+gameround TINYINT NOT NULL DEFAULT 1,
+voteindex SMALLINT NOT NULL DEFAULT 0,
+CONSTRAINT ordergameidfk FOREIGN KEY (gameid) REFERENCES games (gameid),
+CONSTRAINT wwplayerfk FOREIGN KEY (wwid) REFERENCES users (username),
+CONSTRAINT victimplayerfk FOREIGN KEY (victimid) REFERENCES users (username)
+);
+
 CREATE TABLE votes (
 gameid TINYINT,
 votingid VARCHAR(30),
 votedid VARCHAR(30),
-gameround TINYINT,
+gameround TINYINT NOT NULL DEFAULT 1,
 voteindex SMALLINT NOT NULL DEFAULT 0,
 CONSTRAINT votegameidfk FOREIGN KEY (gameid) REFERENCES games (gameid),
 CONSTRAINT votingplayerfk FOREIGN KEY (votingid) REFERENCES users (username),
