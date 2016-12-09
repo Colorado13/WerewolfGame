@@ -1,5 +1,5 @@
 TODO List:
-Set a playerInstance object on the gamepage.jsp, so we can get game id, and also resend it back when the newmessage servlet dispatches the client back to gamepage.jsp
+idea for custom tag: when there is a "System" message on the game chat "Player has died" make it appear in red, also for nightfall and lynching
 Create Security Roles
 Create Header page
 Create Custom JSTL TAG
