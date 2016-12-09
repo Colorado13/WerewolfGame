@@ -5,11 +5,9 @@
  */
 package ca.werewolfgame.controllers;
 
-import ca.werewolfgame.beans.Message;
-import ca.werewolfgame.beans.PlayerInstance;
-import ca.werewolfgame.dao.DAO;
+import ca.werewolfgame.beans.*;
+import ca.werewolfgame.dao.*;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -33,7 +31,7 @@ public class GoToGamePage extends HttpServlet {
         try {
             DAO dao = new DAO();
             
-            PlayerInstance playerInstance = (PlayerInstance)request.getAttribute("playerInstance");
+            PlayerInstance playerInstance = (PlayerInstance)request.getAttribute("playerInstance");            
             
             ArrayList<Message> gameChatHistory = dao.getGameChat(playerInstance.getGameId());
             ArrayList<Message> wwChatHistory = dao.getWwChat(playerInstance.getGameId());

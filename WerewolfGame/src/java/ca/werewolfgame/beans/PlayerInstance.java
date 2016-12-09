@@ -14,6 +14,7 @@ public class PlayerInstance implements java.io.Serializable{
     private String role;
     private String status;
     private int gameId;
+    private int currentRound;
 
     public PlayerInstance() {
     }
@@ -24,6 +25,16 @@ public class PlayerInstance implements java.io.Serializable{
         this.status = status;
         this.gameId = gameId;
     }
+
+    public PlayerInstance(String playerId, String role, String status, int gameId, int currentRound) {
+        this.playerId = playerId;
+        this.role = role;
+        this.status = status;
+        this.gameId = gameId;
+        this.currentRound = currentRound;
+    }
+    
+    
 
     public String getPlayerId() {
         return playerId;
@@ -55,6 +66,14 @@ public class PlayerInstance implements java.io.Serializable{
 
     public void setGameId(int gameId) {
         this.gameId = gameId;
+    }
+
+    public int getCurrentRound() {
+        return currentRound;
+    }
+
+    public void setCurrentRound(int currentRound) {
+        this.currentRound = currentRound;
     }
     
     
