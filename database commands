@@ -70,7 +70,7 @@ gameid TINYINT,
 votingid VARCHAR(30),
 votedid VARCHAR(30),
 gameround TINYINT,
-voteindex SMALLINT,
+voteindex SMALLINT NOT NULL DEFAULT 0,
 CONSTRAINT votegameidfk FOREIGN KEY (gameid) REFERENCES games (gameid),
 CONSTRAINT votingplayerfk FOREIGN KEY (votingid) REFERENCES users (username),
 CONSTRAINT votedplayerfk FOREIGN KEY (votedid) REFERENCES users (username)
