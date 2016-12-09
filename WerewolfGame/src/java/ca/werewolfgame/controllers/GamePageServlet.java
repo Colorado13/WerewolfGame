@@ -46,6 +46,7 @@ public class GamePageServlet extends HttpServlet {
             playerInstance.setRole(dao.getRole(gameId, playerId));
             playerInstance.setStatus(dao.getStatus(gameId, playerId));
             playerInstance.setGameId(gameId);
+            playerInstance.setCurrentRound(dao.getCurrentRound(gameId));
 
             ArrayList<Message> gameChatHistory = dao.getGameChat(gameId);
             request.setAttribute("gameChatHistory", gameChatHistory);
