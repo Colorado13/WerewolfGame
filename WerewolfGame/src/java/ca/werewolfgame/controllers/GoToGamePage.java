@@ -8,6 +8,7 @@ package ca.werewolfgame.controllers;
 import ca.werewolfgame.beans.*;
 import ca.werewolfgame.dao.*;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -17,6 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -29,16 +31,18 @@ public class GoToGamePage extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            HttpSession session = request.getSession();
             DAO dao = new DAO();
             
-            PlayerInstance playerInstance = (PlayerInstance)request.getAttribute("playerInstance");            
+            PlayerInstance playerInstance = (PlayerInstance)request.getAttribute("playerInstance");
             
+            int gameId = (int)(session.getAttribute("currentGameId"));
+            //System.out.println("Game ID at GoToGamePage: " + gameId);
             ArrayList<Message> gameChatHistory = dao.getGameChat(playerInstance.getGameId());
             ArrayList<Message> wwChatHistory = dao.getWwChat(playerInstance.getGameId());
             ArrayList<Message> deadChatHistory = dao.getDeadChat(playerInstance.getGameId());
             
             ArrayList<String> alivePlayers = dao.getPlayers(playerInstance.getGameId());
-            
             ArrayList<String> aliveVillagers = dao.getPlayers(playerInstance.getGameId(),"villagers");    
             
             request.setAttribute("playerInstance", playerInstance);
@@ -48,6 +52,8 @@ public class GoToGamePage extends HttpServlet {
             
             request.setAttribute("alivePlayers", alivePlayers);
             request.setAttribute("aliveVillagers", aliveVillagers);
+            
+            session.setAttribute("currentGameId", gameId);
             
             request.getRequestDispatcher("GamePage.jsp").forward(request, response);
             

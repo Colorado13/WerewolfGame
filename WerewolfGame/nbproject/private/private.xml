@@ -3,16 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/jpedr/Dropbox/JavaWorkspace/WerewolfGame/web/MainPage.jsp</file>
-            <file>file:/C:/Users/jpedr/Dropbox/JavaWorkspace/WerewolfGame/web/GamePage.jsp</file>
-            <file>file:/C:/Users/jpedr/Dropbox/JavaWorkspace/WerewolfGame/src/java/ca/werewolfgame/controllers/GamePageServlet.java</file>
-            <file>file:/C:/Users/jpedr/Dropbox/JavaWorkspace/WerewolfGame/src/java/ca/werewolfgame/controllers/CreateGameServlet.java</file>
-            <file>file:/C:/Users/jpedr/Dropbox/JavaWorkspace/WerewolfGame/web/CreateGame.jsp</file>
-            <file>file:/C:/Users/jpedr/Dropbox/JavaWorkspace/WerewolfGame/web/MyGames.jsp</file>
-            <file>file:/C:/Users/jpedr/Dropbox/JavaWorkspace/WerewolfGame/src/java/ca/werewolfgame/controllers/PreCreateGame.java</file>
-            <file>file:/C:/Users/jpedr/Dropbox/JavaWorkspace/WerewolfGame/src/java/ca/werewolfgame/dao/DAO.java</file>
-            <file>file:/C:/Users/jpedr/Dropbox/JavaWorkspace/WerewolfGame/web/index.jsp</file>
-            <file>file:/C:/Users/jpedr/Dropbox/JavaWorkspace/WerewolfGame/src/java/ca/werewolfgame/controllers/NewMessage.java</file>
+            <file>file:/C:/Users/lemon/Documents/NetBeansProjects/WerewolfGame/src/java/ca/werewolfgame/controllers/NewMessage.java</file>
+            <file>file:/C:/Users/lemon/Documents/NetBeansProjects/WerewolfGame/web/GamePage.jsp</file>
+            <file>file:/C:/Users/lemon/Documents/NetBeansProjects/WerewolfGame/src/java/ca/werewolfgame/dao/DAO.java</file>
         </group>
     </open-files>
 </project-private>

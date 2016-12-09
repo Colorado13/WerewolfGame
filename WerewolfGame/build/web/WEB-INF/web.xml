@@ -5,11 +5,34 @@
 	 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	 version="3.1">
     <servlet>
+        <servlet-name>GetGameChatServlet</servlet-name>
+        <servlet-class>ca.werewolfgame.controllers.GetGameChatServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetGameChatServlet</servlet-name>
+        <url-pattern>/GetGameChatServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>GetWwChatServlet</servlet-name>
+        <servlet-class>ca.werewolfgame.controllers.GetWWChatServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetWwChatServlet</servlet-name>
+        <url-pattern>/GetWwChatServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>GetDeadChatServlet</servlet-name>
+        <servlet-class>ca.werewolfgame.controllers.GetDeadChatServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetDeadChatServlet</servlet-name>
+        <url-pattern>/GetDeadChatServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <security-role-ref>
             <role-name>Admin</role-name>
             <role-link>Admin</role-link>
         </security-role-ref>
-        
         <servlet-name>CreateGameServlet</servlet-name>
         <servlet-class>ca.werewolfgame.controllers.CreateGameServlet</servlet-class>
     </servlet>

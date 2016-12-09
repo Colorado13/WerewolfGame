@@ -36,6 +36,8 @@ public class GamePageServlet extends HttpServlet {
             DAO dao = new DAO();
 
             int gameId = Integer.parseInt(request.getParameter("game"));
+            System.out.println("Game ID at GamePageServlet: " + gameId);
+            session.setAttribute("currentGameId", gameId);
             String playerId = ((User) request.getSession().getAttribute("user")).getUsername();
 
             PlayerInstance playerInstance = new PlayerInstance();
@@ -46,7 +48,20 @@ public class GamePageServlet extends HttpServlet {
             playerInstance.setGameId(gameId);
             playerInstance.setCurrentRound(dao.getCurrentRound(gameId));
 
+            ArrayList<Message> gameChatHistory = dao.getGameChat(gameId);
+            request.setAttribute("gameChatHistory", gameChatHistory);
+
+            if (playerInstance.getStatus().equals("DEAD")) {
+                ArrayList<Message> deadChatHistory = dao.getDeadChat(gameId);
+                request.setAttribute("deadChatHistory", deadChatHistory);
+            } 
+            else if (playerInstance.getRole().equals("werewolf")) {
+                ArrayList<Message> wwChatHistory = dao.getWwChat(gameId);
+                request.setAttribute("wwChatHistory", wwChatHistory);
+            }
+
             request.setAttribute("playerInstance", playerInstance);
+            request.setAttribute("gameId", gameId);
             request.getRequestDispatcher("GoToGamePage").forward(request, response);
 
         } catch (SQLException ex) {

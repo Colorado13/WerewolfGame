@@ -38,15 +38,14 @@ public class Game implements java.io.Serializable{
     public void setPlayerCount(int playerCount) {
         this.playerCount = playerCount;
     }
-
+    
     public int getCurrentRound() {
         return currentRound;
     }
 
-    public void setCurrentRound(int currentRound) {
+   public void setCurrentRound(int currentRound) {
         this.currentRound = currentRound;
     }
-    
     
     
     

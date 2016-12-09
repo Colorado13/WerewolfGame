@@ -1,5 +1,9 @@
 package ca.werewolfgame.dao;
 
+/**
+ *
+ * @author
+ */
 import ca.werewolfgame.beans.*;
 import java.sql.*;
 import java.util.ArrayList;
@@ -369,12 +373,12 @@ public class DAO {
         Collections.sort(userRoster);
         return userRoster;
     }
-
+    
     public ArrayList<String> getPlayers(int gameId) throws SQLException {
 
         ArrayList<String> userRoster = new ArrayList<>();
 
-        String query = "SELECT playerid FROM gameid WHERE gameid = " + gameId + " AND status LIKE 'ALIVE'";
+        String query = "SELECT playerid FROM gameid WHERE gameid = " + gameId + " AND status LIKE 'ALIVE'" ;
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -394,12 +398,12 @@ public class DAO {
         Collections.sort(userRoster);
         return userRoster;
     }
-
+    
     public ArrayList<String> getPlayers(int gameId, String villagers) throws SQLException {
 
         ArrayList<String> userRoster = new ArrayList<>();
 
-        String query = "SELECT playerid FROM gameid WHERE gameid = " + gameId + " AND status LIKE 'ALIVE' AND role NOT LIKE 'werewolf'";
+        String query = "SELECT playerid FROM gameid WHERE gameid = " + gameId + " AND status LIKE 'ALIVE' AND role NOT LIKE 'werewolf'" ;
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -493,7 +497,6 @@ public class DAO {
         }
         return status;
     }
-
     public int getCurrentRound(int gameId) throws SQLException {
         int currentRound;
 
@@ -537,12 +540,9 @@ public class DAO {
 
             rs.next();
 
-            if(rs.getString(1) == null)
-            {
+            if (rs.getString(1) == null) {
                 currentIndex = 0;
-            }
-            else 
-            {
+            } else {
                 currentIndex = Integer.parseInt(rs.getString(1));
             }
 
@@ -603,7 +603,7 @@ public class DAO {
         }
     }
 
-    private int getOrderIndex(int gameId) throws SQLException {
+    public int getOrderIndex(int gameId) throws SQLException {
         int currentIndex;
 
         DAO dao = new DAO();
@@ -622,15 +622,11 @@ public class DAO {
             ResultSet rs = st.executeQuery(query);
 
             rs.next();
-            if(rs.getString(1) == null)
-            {
+            if (rs.getString(1) == null) {
                 currentIndex = 0;
-            }
-            else 
-            {
+            } else {
                 currentIndex = Integer.parseInt(rs.getString(1));
             }
-            
 
             System.out.println(currentIndex);
             con.close();
@@ -638,4 +634,5 @@ public class DAO {
         }
         return currentIndex;
     }
+
 }

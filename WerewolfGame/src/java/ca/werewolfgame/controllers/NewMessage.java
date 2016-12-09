@@ -6,8 +6,9 @@
 package ca.werewolfgame.controllers;
 
 import ca.werewolfgame.beans.*;
-import ca.werewolfgame.dao.DAO;
+import ca.werewolfgame.dao.*;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -70,7 +71,7 @@ public class NewMessage extends HttpServlet {
                 String playerId = user.getUsername();                
                 int gameId = Integer.parseInt(request.getParameter("gameId"));                
                 String role = request.getParameter("role");
-                String status = request.getParameter("status");                
+                String status = request.getParameter("status");         
                 int currentRound = Integer.parseInt(request.getParameter("currentRound"));
                 PlayerInstance playerInstance = new PlayerInstance(playerId, role, status, gameId, currentRound);
                 //System.out.println("Werewolf message in game: " + gameId);
