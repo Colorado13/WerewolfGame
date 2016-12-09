@@ -70,7 +70,7 @@ gameid TINYINT,
 wwid VARCHAR(30),
 victimid VARCHAR(30),
 gameround TINYINT NOT NULL DEFAULT 1,
-voteindex SMALLINT NOT NULL DEFAULT 0,
+orderindex SMALLINT NOT NULL DEFAULT 0,
 CONSTRAINT ordergameidfk FOREIGN KEY (gameid) REFERENCES games (gameid),
 CONSTRAINT wwplayerfk FOREIGN KEY (wwid) REFERENCES users (username),
 CONSTRAINT victimplayerfk FOREIGN KEY (victimid) REFERENCES users (username)
