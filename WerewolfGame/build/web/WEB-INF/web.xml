@@ -10,7 +10,7 @@
             <role-link>Admin</role-link>
         </security-role-ref>
         
-        <servlet-name>CreateGameServlet/servlet-name></servlet-name>
+        <servlet-name>CreateGameServlet</servlet-name>
         <servlet-class>ca.werewolfgame.controllers.CreateGameServlet</servlet-class>
     </servlet>
     <servlet-mapping>
