@@ -8,6 +8,7 @@ package ca.werewolfgame.controllers;
 import ca.werewolfgame.beans.*;
 import ca.werewolfgame.dao.DAO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -57,8 +58,7 @@ public class NewMessage extends HttpServlet {
                 int gameId = Integer.parseInt(request.getParameter("gameId"));                
                 String role = request.getParameter("role");
                 String status = request.getParameter("status");
-                int currentRound = Integer.parseInt(request.getParameter("currentRound"));
-                PlayerInstance playerInstance = new PlayerInstance(playerId, role, status, gameId, currentRound);
+                PlayerInstance playerInstance = new PlayerInstance(playerId, role, status, gameId);
                 dao.AddMessage(message, gameId);
                 request.setAttribute("playerInstance", playerInstance);
                 request.getRequestDispatcher("GoToGamePage").forward(request, response);
@@ -71,8 +71,7 @@ public class NewMessage extends HttpServlet {
                 int gameId = Integer.parseInt(request.getParameter("gameId"));                
                 String role = request.getParameter("role");
                 String status = request.getParameter("status");                
-                int currentRound = Integer.parseInt(request.getParameter("currentRound"));
-                PlayerInstance playerInstance = new PlayerInstance(playerId, role, status, gameId, currentRound);
+                PlayerInstance playerInstance = new PlayerInstance(playerId, role, status, gameId);
                 //System.out.println("Werewolf message in game: " + gameId);
                 dao.AddMessage(message, gameId, "werewolf");
                 request.setAttribute("playerInstance", playerInstance);
@@ -86,8 +85,7 @@ public class NewMessage extends HttpServlet {
                 int gameId = Integer.parseInt(request.getParameter("gameId"));                
                 String role = request.getParameter("role");
                 String status = request.getParameter("status");                
-                int currentRound = Integer.parseInt(request.getParameter("currentRound"));
-                PlayerInstance playerInstance = new PlayerInstance(playerId, role, status, gameId, currentRound);
+                PlayerInstance playerInstance = new PlayerInstance(playerId, role, status, gameId);
                 dao.AddMessage(message, gameId, "deadChat");
                 request.setAttribute("playerInstance", playerInstance);
                 request.getRequestDispatcher("GoToGamePage").forward(request, response);

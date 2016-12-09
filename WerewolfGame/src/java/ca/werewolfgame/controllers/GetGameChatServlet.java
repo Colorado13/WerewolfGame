@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ca.werewolfgame.controllers;
 
 import ca.werewolfgame.beans.*;
@@ -20,24 +15,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-/**
- *
- * @author jpedr
- */
-@WebServlet(name = "GamePageServlet", urlPatterns = {"/GamePageServlet"})
-public class GamePageServlet extends HttpServlet {
+public class GetGameChatServlet extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         try {
             HttpSession session = request.getSession();
             DAO dao = new DAO();
 
-            int gameId = Integer.parseInt(request.getParameter("game"));
-            System.out.println("Game ID at GamePageServlet: " + gameId);
-            session.setAttribute("currentGameId", gameId);
+            int gameId = (int)(session.getAttribute("currentGameId"));
             String playerId = ((User) request.getSession().getAttribute("user")).getUsername();
 
             PlayerInstance playerInstance = new PlayerInstance();
@@ -48,23 +35,23 @@ public class GamePageServlet extends HttpServlet {
             playerInstance.setGameId(gameId);
 
             ArrayList<Message> gameChatHistory = dao.getGameChat(gameId);
-            request.setAttribute("gameChatHistory", gameChatHistory);
-
-            if (playerInstance.getStatus().equals("DEAD")) {
-                ArrayList<Message> deadChatHistory = dao.getDeadChat(gameId);
-                request.setAttribute("deadChatHistory", deadChatHistory);
-            } 
-            else if (playerInstance.getRole().equals("werewolf")) {
-                ArrayList<Message> wwChatHistory = dao.getWwChat(gameId);
-                request.setAttribute("wwChatHistory", wwChatHistory);
+            //request.setAttribute("gameChatHistory", gameChatHistory);
+            
+            PrintWriter out = response.getWriter();
+            
+            out.println("<table>");
+            for (int i = 0; i < gameChatHistory.size(); i++)
+            {
+                out.println("<tr>");
+                out.println("<td>" + gameChatHistory.get(i).getUsername() + "</td>");
+                out.println("<td>>></td>");
+                out.println("<td>" + gameChatHistory.get(i).getMessage() + "</td>");
+                out.println("<tr>");
             }
-
-            request.setAttribute("playerInstance", playerInstance);
-            request.setAttribute("gameId", gameId);
-            request.getRequestDispatcher("GoToGamePage").forward(request, response);
-
+            out.println("</table>");
         } catch (SQLException ex) {
             Logger.getLogger(GamePageServlet.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Exception!");
         }
 
     }
