@@ -8,7 +8,6 @@ package ca.werewolfgame.controllers;
 import ca.werewolfgame.beans.*;
 import ca.werewolfgame.dao.DAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -35,9 +34,6 @@ public class NewMessage extends HttpServlet {
         Message message = new Message(user.getUsername(), text);
 
         ArrayList<Message> chatHistory;
-        ArrayList<Message> gameChatHistory;
-        ArrayList<Message> wwChatHistory;
-        ArrayList<Message> deadChatHistory;
         
         DAO dao = new DAO();
 

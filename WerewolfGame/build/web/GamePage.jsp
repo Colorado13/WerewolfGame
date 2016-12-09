@@ -87,8 +87,28 @@
                 </c:otherwise>
             </c:choose>
             <div>
+                <form method="post" action="VoteServlet">
+                    Choose player to vote:
+                    <select name="vote">
+                        <c:forEach items="${alivePlayers}" var="player">
+                            <option value="${player}">${player}</option>
+                        </c:forEach>
 
+                    </select>
+                </form>
             </div>
+            <c:if test="${playerInstance.role == 'werewolf'}">
+                <div>
+                    <form method="post" action="KillServlet">
+                        Choose who dies:
+                        <select name="kill">
+                            <c:forEach items="${aliveVillagers}" var="player">
+                                <option value="${player}">${player}</option>
+                            </c:forEach>
+                        </select>
+                    </form>
+                </div>
+            </c:if>
             <form method="get" action="MainPage.jsp">
                 <input type="submit" value="Back">
             </form>
