@@ -40,6 +40,7 @@ public class GoToGamePage extends HttpServlet {
             ArrayList<Message> deadChatHistory = dao.getDeadChat(playerInstance.getGameId());
             
             ArrayList<String> alivePlayers = dao.getPlayers(playerInstance.getGameId());
+            
             ArrayList<String> aliveVillagers = dao.getPlayers(playerInstance.getGameId(),"villagers");    
             
             request.setAttribute("playerInstance", playerInstance);

@@ -403,7 +403,7 @@ public class DAO {
 
         ArrayList<String> userRoster = new ArrayList<>();
 
-        String query = "SELECT playerid FROM gameid WHERE gameid = " + gameId + " AND status LIKE 'ALIVE' AND role NOT LIKE 'werewolf" ;
+        String query = "SELECT playerid FROM gameid WHERE gameid = " + gameId + " AND status LIKE 'ALIVE' AND role NOT LIKE 'werewolf'" ;
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
