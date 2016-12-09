@@ -39,6 +39,7 @@
                     <input type="submit" value="Create Game"/>
                 </form>
             </c:if>
+            
         </div>
     </body>
 </html>

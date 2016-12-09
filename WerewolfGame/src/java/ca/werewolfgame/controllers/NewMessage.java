@@ -20,10 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-/**
- *
- * @author jpedr
- */
+
 @WebServlet(name = "NewMessage", urlPatterns = {"/NewMessage"})
 public class NewMessage extends HttpServlet {
 
@@ -52,7 +49,7 @@ public class NewMessage extends HttpServlet {
                 try {
                     chatHistory = dao.getMainChat();
                     request.setAttribute("chatHistory", chatHistory);
-                    request.getRequestDispatcher("MainPage.jsp").forward(request, response);
+                    request.getRequestDispatcher("GoToGamePage").forward(request, response);
                 } catch (SQLException ex) {
                     Logger.getLogger(NewMessage.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -65,19 +62,9 @@ public class NewMessage extends HttpServlet {
                 String role = request.getParameter("role");
                 String status = request.getParameter("status");
                 PlayerInstance playerInstance = new PlayerInstance(playerId, role, status, gameId);
-                
-
                 dao.AddMessage(message, gameId);
-
-                try {
-                    gameChatHistory = dao.getGameChat(gameId);
-                    request.setAttribute("gameChatHistory", gameChatHistory);
-                    request.setAttribute("playerInstance", playerInstance);
-                    request.getRequestDispatcher("GamePage.jsp").forward(request, response);
-
-                } catch (SQLException ex) {
-                    Logger.getLogger(NewMessage.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                request.setAttribute("playerInstance", playerInstance);
+                request.getRequestDispatcher("GoToGamePage").forward(request, response);
                 break;
 
             }
@@ -88,21 +75,10 @@ public class NewMessage extends HttpServlet {
                 String role = request.getParameter("role");
                 String status = request.getParameter("status");                
                 PlayerInstance playerInstance = new PlayerInstance(playerId, role, status, gameId);
-                
-                System.out.println("Werewolf message in game: " + gameId);
+                //System.out.println("Werewolf message in game: " + gameId);
                 dao.AddMessage(message, gameId, "werewolf");
-
-                try {
-                    wwChatHistory = dao.getWwChat(gameId);
-                    gameChatHistory = dao.getGameChat(gameId);
-                    request.setAttribute("gameChatHistory", gameChatHistory);
-                    request.setAttribute("wwChatHistory", wwChatHistory);
-                    request.setAttribute("playerInstance", playerInstance);
-                    request.getRequestDispatcher("GamePage.jsp").forward(request, response);
-
-                } catch (SQLException ex) {
-                    Logger.getLogger(NewMessage.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                request.setAttribute("playerInstance", playerInstance);
+                request.getRequestDispatcher("GoToGamePage").forward(request, response);
                 break;
 
             }
@@ -113,20 +89,9 @@ public class NewMessage extends HttpServlet {
                 String role = request.getParameter("role");
                 String status = request.getParameter("status");                
                 PlayerInstance playerInstance = new PlayerInstance(playerId, role, status, gameId);
-                
                 dao.AddMessage(message, gameId, "deadChat");
-
-                try {
-                    deadChatHistory = dao.getDeadChat(gameId);
-                    gameChatHistory = dao.getGameChat(gameId);
-                    request.setAttribute("gameChatHistory", gameChatHistory);
-                    request.setAttribute("deadChatHistory", deadChatHistory);
-                    request.setAttribute("playerInstance", playerInstance);
-                    request.getRequestDispatcher("GamePage.jsp").forward(request, response);
-
-                } catch (SQLException ex) {
-                    Logger.getLogger(NewMessage.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                request.setAttribute("playerInstance", playerInstance);
+                request.getRequestDispatcher("GoToGamePage").forward(request, response);
                 break;
 
             }

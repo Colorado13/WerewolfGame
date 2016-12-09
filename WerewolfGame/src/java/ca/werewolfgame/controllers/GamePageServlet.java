@@ -58,7 +58,7 @@ public class GamePageServlet extends HttpServlet {
             }
 
             request.setAttribute("playerInstance", playerInstance);
-            request.getRequestDispatcher("GamePage.jsp").forward(request, response);
+            request.getRequestDispatcher("GoToGamePage").forward(request, response);
 
         } catch (SQLException ex) {
             Logger.getLogger(GamePageServlet.class.getName()).log(Level.SEVERE, null, ex);

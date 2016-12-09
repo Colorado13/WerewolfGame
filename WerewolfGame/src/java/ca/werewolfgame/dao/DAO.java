@@ -373,6 +373,56 @@ public class DAO {
         Collections.sort(userRoster);
         return userRoster;
     }
+    
+    public ArrayList<String> getPlayers(int gameId) throws SQLException {
+
+        ArrayList<String> userRoster = new ArrayList<>();
+
+        String query = "SELECT playerid FROM gameid WHERE gameid = " + gameId + " AND status LIKE 'ALIVE'" ;
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try (Connection con = DriverManager.getConnection(host + database, username, password)) {
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+
+                userRoster.add(rs.getString(1));
+            }
+            con.close();
+        }
+        Collections.sort(userRoster);
+        return userRoster;
+    }
+    
+    public ArrayList<String> getPlayers(int gameId, String villagers) throws SQLException {
+
+        ArrayList<String> userRoster = new ArrayList<>();
+
+        String query = "SELECT playerid FROM gameid WHERE gameid = " + gameId + " AND status LIKE 'ALIVE' AND role NOT LIKE 'werewolf" ;
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try (Connection con = DriverManager.getConnection(host + database, username, password)) {
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+
+                userRoster.add(rs.getString(1));
+            }
+            con.close();
+        }
+        Collections.sort(userRoster);
+        return userRoster;
+    }
 
     public ArrayList<Integer> getMyGames(String playerId) throws SQLException {
 
