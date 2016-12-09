@@ -33,6 +33,7 @@
             <c:if test="${playerInstance.status == 'ALIVE'}">
                 <form method="post" action="NewMessage">
                     Message: <input type="text" name="message" /><br>
+                    <!-- maybe our custom tags...? -->
                     <input type="hidden" name="gameId" value="${playerInstance.gameId}"/>
                     <input type="hidden" name="role" value="${playerInstance.role}" />
                     <input type="hidden" name="status" value="${playerInstance.status}" />
@@ -85,6 +86,12 @@
                     </c:if>
                 </c:otherwise>
             </c:choose>
+            <div>
+
+            </div>
+            <form method="get" action="MainPage.jsp">
+                <input type="submit" value="Back">
+            </form>
         </div>
     </body>
 </html>

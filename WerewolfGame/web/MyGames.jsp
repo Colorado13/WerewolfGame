@@ -23,5 +23,10 @@
 
             </c:forEach>
         </form>
+        <form method="get" action="MainPage.jsp">
+            <input type="submit" value="Back">
+        </form>
+            
+            
     </body>
 </html>
