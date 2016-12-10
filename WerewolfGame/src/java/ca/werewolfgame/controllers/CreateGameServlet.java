@@ -15,11 +15,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "CreateGameServlet", urlPatterns = {"/CreateGameServlet"})
+//@WebServlet(name = "CreateGameServlet", urlPatterns = {"/CreateGameServlet"})
 public class CreateGameServlet extends HttpServlet {
-
-   
-
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

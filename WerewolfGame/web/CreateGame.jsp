@@ -1,9 +1,3 @@
-<%-- 
-    Document   : CreateGame
-    Created on : Dec 6, 2016, 8:39:08 PM
-    Author     : jpedr
---%>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="ca.werewolfgame.beans.*"%>
