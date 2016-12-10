@@ -38,7 +38,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>CreateGameServlet</servlet-name>
-        <url-pattern>/admin/create</url-pattern>
+        <url-pattern>/CreateGameServlet</url-pattern>
     </servlet-mapping>
     
     <security-role>
