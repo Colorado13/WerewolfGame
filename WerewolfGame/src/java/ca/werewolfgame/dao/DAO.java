@@ -316,7 +316,7 @@ public class DAO {
         return gameID;
     }
 
-    public void createGame(int gameID, String[] players, HashMap<String, String> gameSetup) {
+    public void createGame(int gameId, String[] players, HashMap<String, String> gameSetup) {
         try {
 
             Class.forName("com.mysql.jdbc.Driver");
@@ -326,12 +326,31 @@ public class DAO {
             for (int i = 0; i < gameSetup.size(); i++) {
                 String preparedStatement = "INSERT INTO gameid (gameid, playerid, role) VALUES (?,?,?)";
                 PreparedStatement ps = con.prepareStatement(preparedStatement);
-                ps.setInt(1, gameID);
+                ps.setInt(1, gameId);
                 ps.setString(2, players[i]);
                 ps.setString(3, gameSetup.get(players[i]));
                 ps.executeUpdate();
 
             }
+            //Add an initial "Game Started" message
+            java.util.Date dt = new java.util.Date();
+
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            String currentTime = sdf.format(dt);
+
+            Class.forName("com.mysql.jdbc.Driver");
+
+            con = DriverManager.getConnection(host + database, username, password);
+
+            String preparedStatement = "INSERT INTO gamechat VALUES (?,?,?,NOW())";
+            PreparedStatement ps = con.prepareStatement(preparedStatement);
+            ps.setInt(1, gameId);
+            ps.setString(2, "SYSTEM");
+            ps.setString(3, "GAME STARTED!");
+            //ps.setString(4, currentTime);
+
+            ps.executeUpdate();
 
             con.close();
 
@@ -538,7 +557,7 @@ public class DAO {
                 currentIndex = Integer.parseInt(rs.getString(1));
             }
 
-            System.out.println(currentIndex);
+            //System.out.println(currentIndex);
             con.close();
 
         }
@@ -620,7 +639,7 @@ public class DAO {
                 currentIndex = Integer.parseInt(rs.getString(1));
             }
 
-            System.out.println(currentIndex);
+            //System.out.println(currentIndex);
             con.close();
 
         }
@@ -631,7 +650,9 @@ public class DAO {
 
         java.sql.Timestamp startTime;
 
-        String query = "SELECT MIN(thetime) FROM gamechat WHERE gameid = " + gameId;
+        String query = "SELECT MAX(thetime) FROM gamechat WHERE gameid = "
+                + gameId
+                + " AND playerid LIKE 'SYSTEM'";
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -650,7 +671,9 @@ public class DAO {
             con.close();
 
         }
+
         return startTime;
+
     }
 
     public long getElapsedTime(int gameId) throws SQLException {
@@ -684,7 +707,7 @@ public class DAO {
 
         long diff = milliseconds2 - milliseconds1;
         long diffSeconds = diff / 1000;
-        
+
         //long diffMinutes = diff / (60 * 1000);
         //long diffHours = diff / (60 * 60 * 1000);
         //long diffDays = diff / (24 * 60 * 60 * 1000);
@@ -694,7 +717,87 @@ public class DAO {
         System.out.println("Hours:" + diffHours);
         System.out.println("Days:" + diffDays);
          */
-
         return diffSeconds;
+    }
+
+    public void lynchPlayer(int gameId, int currentRound) {
+
+    }
+
+    public void killPlayer(int gameId, int currentRound) throws SQLException, ClassNotFoundException {
+        Message message;
+        String query = "SELECT victimid FROM killorder WHERE gameid = '"
+                + gameId
+                + "' AND orderindex = (SELECT MAX(orderindex) FROM killorder WHERE gameid = '"
+                + gameId
+                + "' AND gameround = '"
+                + currentRound
+                + "')";
+
+        System.out.println(query);
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try (Connection con = DriverManager.getConnection(host + database, username, password)) {
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
+            rs.next();
+            String playerId = (rs.getString(1)) + " WAS KILLED DURING THE NIGHT!";
+            message = new Message("SYSTEM", playerId);
+            AddMessage(message, gameId);
+
+            changePlayerToDead(gameId, playerId);
+            con.close();
+        }
+
+    }
+
+    public void checkEndGame() {
+
+    }
+
+    public void increaseRound(int gameId) throws SQLException, ClassNotFoundException {
+        int currentRound = getCurrentRound(gameId);
+        int newRound = currentRound + 1;
+
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection con;
+
+        con = DriverManager.getConnection(host + database, username, password);
+
+        String preparedStatement = "UPDATE games SET gameround = "
+                + newRound
+                + " WHERE gameId = "
+                + gameId;
+
+        System.out.println(preparedStatement);
+
+        PreparedStatement ps = con.prepareStatement(preparedStatement);
+
+        ps.executeUpdate();
+        con.close();
+
+    }
+
+    private void changePlayerToDead(int gameId, String playerId) throws ClassNotFoundException, SQLException {
+
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection con;
+
+        con = DriverManager.getConnection(host + database, username, password);
+
+        String preparedStatement = "UPDATE gameid SET status = 'DEAD' WHERE gameid = "
+                + gameId
+                + " AND WHERE playerid = "
+                + playerId;
+
+        System.out.println(preparedStatement);
+
+        PreparedStatement ps = con.prepareStatement(preparedStatement);
+
+        ps.executeUpdate();
+        con.close();
     }
 }
