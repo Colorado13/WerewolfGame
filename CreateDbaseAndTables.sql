@@ -88,6 +88,9 @@ INSERT INTO users(username, password, privilege, nummatches, numwins)
   VALUES ('Jamie', 'root', 'ADMIN', 0, 0)
 ;
 INSERT INTO users(username, password, privilege, nummatches, numwins)
+  VALUES ('SYSTEM', 'system', 'ROOT', 0, 0)
+;
+INSERT INTO users(username, password, privilege, nummatches, numwins)
   VALUES ('Player1', 'Player1', 'MEMBER', 0, 0)
 ;
 INSERT INTO users(username, password, privilege, nummatches, numwins)
