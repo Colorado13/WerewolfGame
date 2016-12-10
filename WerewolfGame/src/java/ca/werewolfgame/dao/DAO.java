@@ -800,4 +800,61 @@ public class DAO {
         ps.executeUpdate();
         con.close();
     }
+    public ArrayList<Vote> getVotesAgainst(int gameId, String playerId, int currentRound) throws SQLException
+    {
+        ArrayList<Vote> votes = new ArrayList<Vote>();
+        
+        String query = "SELECT * FROM votes WHERE gameid = " + gameId + " AND gameround  = " + currentRound + " AND votedid LIKE '" + playerId + "'";
+        Vote vote = new Vote();
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try (Connection con = DriverManager.getConnection(host + database, username, password)) {
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+                vote.setGameId(rs.getInt(1));
+                vote.setVotingId(rs.getString(2));
+                vote.setVotedId(rs.getString(3));
+                vote.setRound(rs.getInt(4));
+                vote.setVoteIndex(rs.getInt(5));
+                votes.add(vote);
+            }
+            con.close();
+        }     
+        
+        return votes;
+    }
+    
+    public ArrayList<Vote> getVotesBy(int gameId, String playerId, int currentRound) throws SQLException
+    {
+        ArrayList<Vote> votes = new ArrayList<Vote>();
+        
+        String query = "SELECT * FROM votes WHERE gameid = " + gameId + " AND gameround  = " + currentRound + " AND votingid LIKE '" + playerId + "'";
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try (Connection con = DriverManager.getConnection(host + database, username, password)) {
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+                Vote vote = new Vote();
+                vote.setGameId(rs.getInt(1));
+                vote.setVotingId(rs.getString(2));
+                vote.setVotedId(rs.getString(3));
+                vote.setRound(rs.getInt(4));
+                vote.setVoteIndex(rs.getInt(5));
+                votes.add(vote);
+            }
+            con.close();
+        }     
+        
+        return votes;
+    }
 }

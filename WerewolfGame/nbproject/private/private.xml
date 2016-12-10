@@ -3,17 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/lemon/Documents/NetBeansProjects/WerewolfGame/src/java/ca/werewolfgame/controllers/CreateGameServlet.java</file>
-            <file>file:/C:/Users/lemon/Documents/NetBeansProjects/WerewolfGame/src/java/ca/werewolfgame/dao/DAO.java</file>
-            <file>file:/C:/Users/lemon/Documents/NetBeansProjects/WerewolfGame/src/java/ca/werewolfgame/controllers/GetDeadChatServlet.java</file>
-            <file>file:/C:/Users/lemon/Documents/NetBeansProjects/WerewolfGame/src/java/ca/werewolfgame/controllers/GamePageServlet.java</file>
-            <file>file:/C:/Users/lemon/Documents/NetBeansProjects/WerewolfGame/src/java/ca/werewolfgame/controllers/GetGameChatServlet.java</file>
-            <file>file:/C:/Users/lemon/Documents/NetBeansProjects/WerewolfGame/web/WEB-INF/web.xml</file>
-            <file>file:/C:/Users/lemon/Documents/NetBeansProjects/WerewolfGame/src/java/ca/werewolfgame/controllers/GoToGamePage.java</file>
-            <file>file:/C:/Users/lemon/Documents/NetBeansProjects/WerewolfGame/src/java/ca/werewolfgame/controllers/GetWWChatServlet.java</file>
+            <file>file:/C:/Users/lemon/Documents/NetBeansProjects/WerewolfGame/src/java/ca/werewolfgame/controllers/ShowVotesServlet.java</file>
             <file>file:/C:/Users/lemon/Documents/NetBeansProjects/WerewolfGame/web/CreateGame.jsp</file>
+            <file>file:/C:/Users/lemon/Documents/NetBeansProjects/WerewolfGame/src/java/ca/werewolfgame/dao/DAO.java</file>
+            <file>file:/C:/Users/lemon/Documents/NetBeansProjects/WerewolfGame/src/java/ca/werewolfgame/controllers/CreateGameServlet.java</file>
+            <file>file:/C:/Users/lemon/Documents/NetBeansProjects/WerewolfGame/src/java/ca/werewolfgame/controllers/GetDeadChatServlet.java</file>
+            <file>file:/C:/Users/lemon/Documents/NetBeansProjects/WerewolfGame/web/WEB-INF/web.xml</file>
             <file>file:/C:/Users/lemon/Documents/NetBeansProjects/WerewolfGame/web/GamePage.jsp</file>
-            <file>file:/C:/Users/lemon/Documents/NetBeansProjects/WerewolfGame/src/java/ca/werewolfgame/controllers/NewMessage.java</file>
         </group>
     </open-files>
 </project-private>

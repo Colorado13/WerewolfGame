@@ -13,6 +13,7 @@
                         $('#GameChatMessages').load('./GetGameChatServlet');
                         $('#DeadChatMessages').load('./GetDeadChatServlet');
                         $('#WwChatMessages').load('./GetWwChatServlet');
+                        $('#ShowVotes').load('./ShowVotesServlet');
                     });
                 }, 1000);
             });
@@ -25,8 +26,9 @@
         <h3>Current round is ${playerInstance.currentRound}<h3>
         <h3>In this game you are a ${playerInstance.role}</h3>
         <h3>You are currently ${playerInstance.status}</h3>
-        
-
+        <h4>Votes</h4>
+        <div id="ShowVotes">
+        </div>
         <div class="GameChat">
             <h2>Game Chat</h2>
             <div id="GameChatMessages">
