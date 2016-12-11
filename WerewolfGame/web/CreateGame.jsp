@@ -3,16 +3,15 @@
 <%@page import="ca.werewolfgame.beans.*"%>
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-        <style type="text/css">
-
-        </style>
-    </head>
-    <body>
-        <h1>Create Game!</h1>
-        <div>
+    <jsp:include page="Header.jsp">
+            <jsp:param name="navigation" value ="<li><a href=\"#\">Main Page</a></li>
+                    <li><a href=\"#\">MyGames</a></li>
+                    <li><a href=\"#\">My Stats</a></li>
+                    <li class=\"active\"><a href=\"#\">Create Game</a></li>
+                    <li><a href=\"#\">Logout</a></li>" />
+    </jsp:include>
+        <div id="MainDiv">
+            <h1>Create Game!</h1>
             <form method="post" action="CreateGameServlet" onsubmit="selectAll">
                 <div>
                     Name: <input type="text" name="GameName" /><br>
