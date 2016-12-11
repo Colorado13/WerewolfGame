@@ -27,7 +27,7 @@ public class ActionServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        //try {
+        try {
             HttpSession session = request.getSession();
             User user = (User) session.getAttribute("user");
             String action = request.getParameter("action");
@@ -38,24 +38,19 @@ public class ActionServlet extends HttpServlet {
             String status = request.getParameter("status");
             int currentRound = Integer.parseInt(request.getParameter("currentRound"));
             PlayerInstance playerInstance = new PlayerInstance(playerId, role, status, gameId, currentRound);
-
             DAO dao = new DAO();
-            /*
             if (dao.getElapsedTime(gameId) >= GameParameters.getRoundDuration) {
-                if (dao.getCurrentRound(gameId) != playerInstance.getCurrentRound()) {
-                    
+                //System.out.println("Round ended");
+                //System.out.println("Current Round Table: " + dao.getCurrentRound(gameId));
+                //System.out.println("Current Round Player Instance: " + playerInstance.getCurrentRound());
+
+                if (dao.getCurrentRound(gameId) == playerInstance.getCurrentRound()) {
+                    //System.out.println("Round number didnt change");
                     request.setAttribute("playerInstance", playerInstance);
                     request.getRequestDispatcher("ProcessRound").forward(request, response);
                 }
 
-            }*/
-            
-            //else
-            {
-                if (selectedPlayer == null) {
-                request.setAttribute("playerInstance", playerInstance);
-                request.getRequestDispatcher("GoToGamePage").forward(request, response);
-            } else {
+            } else if (selectedPlayer != null) {
                 if (action.equals("Vote!")) {
 
                     dao.castVote(gameId, playerId, selectedPlayer);
@@ -66,17 +61,13 @@ public class ActionServlet extends HttpServlet {
                     dao.killOrder(gameId, playerId, selectedPlayer);
 
                 }
-
                 request.setAttribute("playerInstance", playerInstance);
                 request.getRequestDispatcher("GoToGamePage").forward(request, response);
-            }
-            }
 
-            
-        }// catch (SQLException ex) {
-           // Logger.getLogger(ActionServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ActionServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    //}
-
-//}
+    }
+}

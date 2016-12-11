@@ -720,8 +720,23 @@ public class DAO {
         return diffSeconds;
     }
 
-    public void lynchPlayer(int gameId, int currentRound) {
+    public void lynchPlayer(int gameId, int currentRound) throws SQLException, ClassNotFoundException {
+        Message message;
+        String mostVoted = getMostVoted(gameId, currentRound);
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try (Connection con = DriverManager.getConnection(host + database, username, password)) {
+            
+            String playerToLynch = (mostVoted + " WAS LYNCHED BY THE ANGRY MOB!");
+            message = new Message("SYSTEM", playerToLynch);
+            AddMessage(message, gameId);
 
+            changePlayerToDead(gameId, mostVoted);
+            con.close();
+        }
     }
 
     public void killPlayer(int gameId, int currentRound) throws SQLException, ClassNotFoundException {
@@ -744,11 +759,12 @@ public class DAO {
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(query);
             rs.next();
-            String playerId = (rs.getString(1)) + " WAS KILLED DURING THE NIGHT!";
-            message = new Message("SYSTEM", playerId);
+            String killedPlayer = rs.getString(1);
+            String playerToKill = (killedPlayer + " WAS KILLED DURING THE NIGHT!");
+            message = new Message("SYSTEM", playerToKill);
             AddMessage(message, gameId);
 
-            changePlayerToDead(gameId, playerId);
+            changePlayerToDead(gameId, killedPlayer);
             con.close();
         }
 
@@ -790,8 +806,9 @@ public class DAO {
 
         String preparedStatement = "UPDATE gameid SET status = 'DEAD' WHERE gameid = "
                 + gameId
-                + " AND WHERE playerid = "
-                + playerId;
+                + " AND playerid = '"
+                + playerId
+                + "'";
 
         System.out.println(preparedStatement);
 
@@ -800,10 +817,10 @@ public class DAO {
         ps.executeUpdate();
         con.close();
     }
-    public ArrayList<Vote> getVotesAgainst(int gameId, String playerId, int currentRound) throws SQLException
-    {
-        ArrayList<Vote> votes = new ArrayList<Vote>();
-        
+
+    public ArrayList<Vote> getVotesAgainst(int gameId, String playerId, int currentRound) throws SQLException {
+        ArrayList<Vote> votes = new ArrayList<>();
+
         String query = "SELECT * FROM votes WHERE gameid = " + gameId + " AND gameround  = " + currentRound + " AND votedid LIKE '" + playerId + "'";
         Vote vote = new Vote();
         try {
@@ -824,15 +841,14 @@ public class DAO {
                 votes.add(vote);
             }
             con.close();
-        }     
-        
+        }
+
         return votes;
     }
-    
-    public ArrayList<Vote> getVotesBy(int gameId, String playerId, int currentRound) throws SQLException
-    {
+
+    public ArrayList<Vote> getVotesBy(int gameId, String playerId, int currentRound) throws SQLException {
         ArrayList<Vote> votes = new ArrayList<Vote>();
-        
+
         String query = "SELECT * FROM votes WHERE gameid = " + gameId + " AND gameround  = " + currentRound + " AND votingid LIKE '" + playerId + "'";
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -853,8 +869,12 @@ public class DAO {
                 votes.add(vote);
             }
             con.close();
-        }     
-        
+        }
+
         return votes;
+    }
+
+    private String getMostVoted(int gameId, int currentRound) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

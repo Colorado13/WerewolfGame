@@ -36,7 +36,7 @@ public class GamePageServlet extends HttpServlet {
             DAO dao = new DAO();
 
             int gameId = Integer.parseInt(request.getParameter("game"));
-            System.out.println("Game ID at GamePageServlet: " + gameId);
+            //System.out.println("Game ID at GamePageServlet: " + gameId);
             session.setAttribute("currentGameId", gameId);
             String playerId = ((User) request.getSession().getAttribute("user")).getUsername();
 
@@ -66,7 +66,7 @@ public class GamePageServlet extends HttpServlet {
 
         } catch (SQLException ex) {
             Logger.getLogger(GamePageServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+       }
 
     }
 

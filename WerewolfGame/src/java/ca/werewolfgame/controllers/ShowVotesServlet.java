@@ -23,9 +23,15 @@ public class ShowVotesServlet extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             DAO dao = new DAO();
-
-            int gameId = (int)(session.getAttribute("currentGameId"));
-            String playerId = ((User) request.getSession().getAttribute("user")).getUsername();
+            
+            int gameId = 0;
+            String playerId = "Player";
+            if (session.getAttribute("currentGameId") != null) {
+                gameId = (int) (session.getAttribute("currentGameId"));
+            }
+            if (request.getSession().getAttribute("user") != null) {
+                playerId = ((User) request.getSession().getAttribute("user")).getUsername();
+            }
             
             PlayerInstance playerInstance = new PlayerInstance();
 
