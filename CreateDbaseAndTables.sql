@@ -13,6 +13,7 @@ CREATE TABLE games
 ( gameid TINYINT NOT NULL AUTO_INCREMENT
 , numofplayers DECIMAL(2,0)
 , gameround TINYINT DEFAULT 1
+, gamestatus VARCHAR(8) DEFAULT 'active'
 , CONSTRAINT pkgames PRIMARY KEY (gameid)
 );
 
