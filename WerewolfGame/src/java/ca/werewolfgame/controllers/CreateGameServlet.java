@@ -23,8 +23,11 @@ public class CreateGameServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             String[] players = request.getParameterValues("player");
-            
-            int playerCount = players.length;
+            int playerCount = 10;
+            if(players.length != 0)
+            {
+               playerCount = players.length;
+            }
             
             DAO dao = new DAO();
             

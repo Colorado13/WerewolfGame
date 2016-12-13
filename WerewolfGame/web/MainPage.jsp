@@ -17,7 +17,7 @@
                    <li><a href=\"#\">Logout</a></li>" />
     </jsp:include>
 
-    <div id="MainDiv">
+    <div class="MainDiv">
         <h1>Main Page</h1>
         <h2>Welcome ${user.username}</h2>
         <h2>Your status is ${user.privilege}</h2>

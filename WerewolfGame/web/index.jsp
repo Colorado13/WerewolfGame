@@ -16,7 +16,7 @@
         </jsp:include>
         <h1>Werewolf Game</h1>
         <h1>Login Page</h1>
-        <div id="MainDiv">
+        <div class="MainDiv">
             <h2>Login</h2>
             <form method="post" action="LoginServlet">
                 Name: <input type="text" name="name" /><br>

@@ -53,7 +53,7 @@ public class LoginServlet extends HttpServlet {
                 } else {
                     dao.AddUser(user);
                     session.setAttribute("user", user);
-                    
+
                     ArrayList<Message> chatHistory = dao.getMainChat();
                     request.setAttribute("chatHistory", chatHistory);
                     request.getRequestDispatcher("MainPage.jsp").forward(request, response);
@@ -68,14 +68,19 @@ public class LoginServlet extends HttpServlet {
                 for (int i = 0; i < usersList.size(); i++) {
                     if (usersList.get(i).getUsername().equals(user.getUsername())) {
                         if (usersList.get(i).getPassword().equals(user.getPassword())) {
-                            //System.out.println("Login Successful");
-                            user.setPrivilege(usersList.get(i).getPrivilege());
-                            session.setAttribute("user", user);
+                            if (usersList.get(i).getUsername().equals("SYSTEM")) {
+                                response.sendRedirect("GameRunner");
+                            } else {
+                                //System.out.println("Login Successful");
+                                user.setPrivilege(usersList.get(i).getPrivilege());
+                                session.setAttribute("user", user);
 
-                            ArrayList<Message> chatHistory = dao.getMainChat();
-                            request.setAttribute("chatHistory", chatHistory);
-                            request.getRequestDispatcher("MainPage.jsp").forward(request, response);
+                                ArrayList<Message> chatHistory = dao.getMainChat();
+                                request.setAttribute("chatHistory", chatHistory);
+                                request.getRequestDispatcher("MainPage.jsp").forward(request, response);
+                            }
                         }
+
                     }
                 }
             } catch (SQLException ex) {
