@@ -23,25 +23,30 @@ public class GetDeadChatServlet extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             DAO dao = new DAO();
+            PlayerInstance playerInstance = new PlayerInstance();
             int gameId = 0;
             String playerId = "Player";
-            if (session.getAttribute("currentGameId") != null)
-                    {
-                        gameId = (int)(session.getAttribute("currentGameId"));
-                    }
-            if (request.getSession().getAttribute("user") != null)
-            {
+            String role = "role";
+            String status = "status";
+            int currentRound = 0;
+            
+            if (session.getAttribute("currentGameId") != null) {
+                gameId = (int) (session.getAttribute("currentGameId"));
+            }
+            if (request.getSession().getAttribute("user") != null) {
                 playerId = ((User) request.getSession().getAttribute("user")).getUsername();
             }
-            
-
-            PlayerInstance playerInstance = new PlayerInstance();
-
+            if (dao.getRole(gameId, playerId) != null) {
+                role = dao.getRole(gameId, playerId);
+            }
+            if (dao.getCurrentRound(gameId) != 0) {
+                currentRound = dao.getCurrentRound(gameId);
+            }
             playerInstance.setPlayerId(playerId);
-            playerInstance.setRole(dao.getRole(gameId, playerId));
-            playerInstance.setStatus(dao.getStatus(gameId, playerId));
+            playerInstance.setRole(role);
+            playerInstance.setStatus(status);
+            playerInstance.setCurrentRound(currentRound);
             playerInstance.setGameId(gameId);
-
             ArrayList<Message> DeadChatHistory = dao.getDeadChat(gameId);
             //request.setAttribute("gameChatHistory", gameChatHistory);
             

@@ -477,8 +477,12 @@ public class DAO {
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(query);
 
-            rs.next();
-            role = rs.getString(1);
+            if (rs.next()) {
+                role = rs.getString(1);
+            } else {
+                role = "role";
+            }
+
             con.close();
 
         }
@@ -512,7 +516,7 @@ public class DAO {
         int currentRound;
 
         String query = "SELECT MAX(gameround) from games WHERE gameid like '" + gameId + "'";
-
+        //System.out.println(query);
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
@@ -523,8 +527,11 @@ public class DAO {
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(query);
 
-            rs.next();
-            currentRound = Integer.parseInt(rs.getString(1));
+            if (rs.next()) {
+                currentRound = rs.getInt(1);
+            } else {
+                currentRound = 1;
+            }
             con.close();
 
         }
@@ -695,9 +702,16 @@ public class DAO {
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(query);
 
-            rs.next();
+            if(rs.next())
+            {
+                currentTime = rs.getTimestamp(1);
+            }
+            else
+            {
+                currentTime = startTime;
+            }
 
-            currentTime = rs.getTimestamp(1);
+            
 
             con.close();
 
@@ -722,14 +736,14 @@ public class DAO {
 
     public void lynchPlayer(int gameId, int currentRound) throws SQLException, ClassNotFoundException {
         Message message;
-        String mostVoted = getMostVoted(gameId, currentRound);
+        String mostVoted = GameChecker.getMostVoted(gameId, currentRound);
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         try (Connection con = DriverManager.getConnection(host + database, username, password)) {
-            
+
             String playerToLynch = (mostVoted + " WAS LYNCHED BY THE ANGRY MOB!");
             message = new Message("SYSTEM", playerToLynch);
             AddMessage(message, gameId);
@@ -749,7 +763,7 @@ public class DAO {
                 + currentRound
                 + "')";
 
-        System.out.println(query);
+        //System.out.println(query);
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
@@ -758,19 +772,16 @@ public class DAO {
         try (Connection con = DriverManager.getConnection(host + database, username, password)) {
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(query);
-            rs.next();
-            String killedPlayer = rs.getString(1);
-            String playerToKill = (killedPlayer + " WAS KILLED DURING THE NIGHT!");
-            message = new Message("SYSTEM", playerToKill);
-            AddMessage(message, gameId);
+            if (rs.next()) {
+                String killedPlayer = rs.getString(1);
+                String playerToKill = (killedPlayer + " WAS KILLED DURING THE NIGHT!");
+                message = new Message("SYSTEM", playerToKill);
+                AddMessage(message, gameId);
+                changePlayerToDead(gameId, killedPlayer);
+            }
 
-            changePlayerToDead(gameId, killedPlayer);
             con.close();
         }
-
-    }
-
-    public void checkEndGame() {
 
     }
 
@@ -797,7 +808,7 @@ public class DAO {
 
     }
 
-    private void changePlayerToDead(int gameId, String playerId) throws ClassNotFoundException, SQLException {
+    public void changePlayerToDead(int gameId, String playerId) throws ClassNotFoundException, SQLException {
 
         Class.forName("com.mysql.jdbc.Driver");
         Connection con;
@@ -810,7 +821,7 @@ public class DAO {
                 + playerId
                 + "'";
 
-        System.out.println(preparedStatement);
+        //System.out.println(preparedStatement);
 
         PreparedStatement ps = con.prepareStatement(preparedStatement);
 
@@ -847,9 +858,39 @@ public class DAO {
     }
 
     public ArrayList<Vote> getVotesBy(int gameId, String playerId, int currentRound) throws SQLException {
-        ArrayList<Vote> votes = new ArrayList<Vote>();
+        ArrayList<Vote> votes = new ArrayList<>();
+        if (currentRound != 0) {
+            String query = "SELECT * FROM votes WHERE gameid = " + gameId + " AND gameround  = " + currentRound + " AND votingid LIKE '" + playerId + "'";
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try (Connection con = DriverManager.getConnection(host + database, username, password)) {
+                Statement st = con.createStatement();
+                ResultSet rs = st.executeQuery(query);
 
-        String query = "SELECT * FROM votes WHERE gameid = " + gameId + " AND gameround  = " + currentRound + " AND votingid LIKE '" + playerId + "'";
+                while (rs.next()) {
+                    Vote vote = new Vote();
+                    vote.setGameId(rs.getInt(1));
+                    vote.setVotingId(rs.getString(2));
+                    vote.setVotedId(rs.getString(3));
+                    vote.setRound(rs.getInt(4));
+                    vote.setVoteIndex(rs.getInt(5));
+                    votes.add(vote);
+                }
+                con.close();
+            }
+
+        }
+        return votes;
+    }
+
+    public ArrayList<Vote> getLastVotes(int gameId, int currentRound) throws SQLException {
+        ArrayList<Vote> votes = new ArrayList<>();
+
+        String query = "SELECT votingid ,votedid, MAX(voteindex) from votes where gameround = " + currentRound + " and gameid = " + gameId + " GROUP BY votingid";
+
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
@@ -861,11 +902,11 @@ public class DAO {
 
             while (rs.next()) {
                 Vote vote = new Vote();
-                vote.setGameId(rs.getInt(1));
-                vote.setVotingId(rs.getString(2));
-                vote.setVotedId(rs.getString(3));
-                vote.setRound(rs.getInt(4));
-                vote.setVoteIndex(rs.getInt(5));
+                vote.setGameId(gameId);
+                vote.setVotingId(rs.getString(1));
+                vote.setVotedId(rs.getString(2));
+                vote.setRound(currentRound);
+                vote.setVoteIndex(rs.getInt(3));
                 votes.add(vote);
             }
             con.close();
@@ -874,7 +915,92 @@ public class DAO {
         return votes;
     }
 
-    private String getMostVoted(int gameId, int currentRound) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ArrayList<Integer> GetActiveGames() throws SQLException {
+        ArrayList<Integer> myGames = new ArrayList<>();
+
+        String query = "SELECT gameid from games WHERE gamestatus like 'active'";
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try (Connection con = DriverManager.getConnection(host + database, username, password)) {
+
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+                myGames.add(Integer.parseInt(rs.getString(1)));
+
+            }
+            con.close();
+        }
+
+        return myGames;
+    }
+
+    public int getPlayerCount(int gameId) throws SQLException {
+        int gameCount;
+
+        String query = "SELECT numofplayers from games WHERE gameid like '" + gameId + "'";
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try (Connection con = DriverManager.getConnection(host + database, username, password)) {
+
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            rs.next();
+            gameCount = rs.getInt(1);
+            con.close();
+
+        }
+        return gameCount;
+    }
+
+    public String getGameStatus(int gameId) throws SQLException {
+        String gameStatus;
+
+        String query = "SELECT gamestatus from games WHERE gameid like '" + gameId + "'";
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try (Connection con = DriverManager.getConnection(host + database, username, password)) {
+
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            rs.next();
+            gameStatus = rs.getString(1);
+            con.close();
+
+        }
+        return gameStatus;
+    }
+
+    public void endGame(int gameId, String check) throws ClassNotFoundException, SQLException {
+
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection con;
+
+        con = DriverManager.getConnection(host + database, username, password);
+
+        //System.out.println(check);
+
+        String preparedStatement = "UPDATE games SET gamestatus = '" + check + "' WHERE gameid = "
+                + gameId;
+
+        PreparedStatement ps = con.prepareStatement(preparedStatement);
+
+        ps.executeUpdate();
+        con.close();
     }
 }

@@ -23,25 +23,32 @@ public class ShowVotesServlet extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             DAO dao = new DAO();
-            
+            PlayerInstance playerInstance = new PlayerInstance();
             int gameId = 0;
             String playerId = "Player";
+            String role = "role";
+            String status = "status";
+            int currentRound = 0;
+            
             if (session.getAttribute("currentGameId") != null) {
                 gameId = (int) (session.getAttribute("currentGameId"));
             }
             if (request.getSession().getAttribute("user") != null) {
                 playerId = ((User) request.getSession().getAttribute("user")).getUsername();
             }
-            
-            PlayerInstance playerInstance = new PlayerInstance();
-
+            if (dao.getRole(gameId, playerId) != null) {
+                role = dao.getRole(gameId, playerId);
+            }
+            if (dao.getCurrentRound(gameId) != 0) {
+                currentRound = dao.getCurrentRound(gameId);
+            }
             playerInstance.setPlayerId(playerId);
-            playerInstance.setRole(dao.getRole(gameId, playerId));
-            playerInstance.setStatus(dao.getStatus(gameId, playerId));
-            playerInstance.setCurrentRound(dao.getCurrentRound(gameId));
+            playerInstance.setRole(role);
+            playerInstance.setStatus(status);
+            playerInstance.setCurrentRound(currentRound);
             playerInstance.setGameId(gameId);
             
-            int currentRound = dao.getCurrentRound(gameId);
+            
             ArrayList<String> allPlayers = dao.getPlayers(gameId);           
             PrintWriter out = response.getWriter();
             out.println("<h5>Inverted Tally</h5>");
