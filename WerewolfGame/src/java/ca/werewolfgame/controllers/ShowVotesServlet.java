@@ -88,43 +88,6 @@ public class ShowVotesServlet extends HttpServlet {
                 }
             }
             out.println("</table>");
-            out.println("<h5>Tally</h5>");
-            out.println("<table>");
-            // tally (needs strikethroughs when it's not current index)
-            for (int i = 0; i < allPlayers.size(); i++)
-            {
-                String player = allPlayers.get(i);
-                ArrayList<Vote> votes = dao.getVotesAgainst(gameId, player, currentRound);
-                if (votes.size() != 0)
-                {
-                    out.println("<tr>");
-                    out.println("<td>" + player + "</td>");
-                    out.println("<td>-</td>");
-                    out.println("<td>" + votes.size() + "</td>");
-                    out.println("<td>-</td>");
-                    for (int j = 0; j < votes.size(); j++)
-                    {
-                        int latestVote = 0;
-                        for (int l = 0; l < votes.size(); l++)
-                        {
-                            int currentVote = votes.get(l).getVoteIndex();
-                            if (currentVote > latestVote)
-                            {
-                                latestVote = currentVote;
-                            }
-                        }
-                       if (votes.get(j).getVoteIndex() != latestVote)
-                       {
-                           out.println("<td><strike>" + votes.get(j).getVotingId() + " [" + votes.get(j).getVoteIndex() + "] </strike></td>");    
-                       }
-                       else
-                       {
-                           out.println("<td>" + votes.get(j).getVotingId() + " [" + votes.get(j).getVoteIndex() + "]</td>");
-                       }
-                    }
-                }
-            }
-            out.println("</table>");
         } catch (SQLException ex) {
             Logger.getLogger(GamePageServlet.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Exception!");
