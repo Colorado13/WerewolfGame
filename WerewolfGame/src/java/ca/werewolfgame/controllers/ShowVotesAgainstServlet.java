@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -15,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class ShowVotesServlet extends HttpServlet {
+public class ShowVotesAgainstServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -38,43 +39,60 @@ public class ShowVotesServlet extends HttpServlet {
             int currentRound = dao.getCurrentRound(gameId);
             ArrayList<String> allPlayers = dao.getPlayers(gameId);           
             PrintWriter out = response.getWriter();
-            out.println("<h5>Inverted Tally</h5>");
+            // tally (needs strikethroughs when it's not current index)
+            out.println("<h5>Tally</h5>");
             out.println("<table>");
-            // inverted tally
+            HashMap<String, Integer> votesAgainst = (HashMap<String, Integer>)session.getAttribute("votesAgainst");
+            
+            /* THIS LOGIC IS NOT WORKING... REWORK! */
             for (int i = 0; i < allPlayers.size(); i++)
             {
                 String player = allPlayers.get(i);
-                ArrayList<Vote> votes = dao.getVotesBy(gameId, player, currentRound);
-                if (votes.size() != 0)
+                ArrayList<Vote> votes = dao.getVotesAgainst(gameId, player, currentRound);
+                if (!votes.isEmpty())
                 {
                     out.println("<tr>");
                     out.println("<td>" + player + "</td>");
                     out.println("<td>-</td>");
-                    out.println("<td>" + votes.size() + "</td>");
-                    out.println("<td>-</td>");
-                    for (int j = 0; j < votes.size(); j++)
+                    if (votesAgainst.containsKey(allPlayers.get(i)))
                     {
-                        int latestVote = 0;
-                        for (int l = 0; l < votes.size(); l++)
+                        out.println("<td>" + votesAgainst.get(allPlayers.get(i)) + "</td>");
+                    }
+                    out.println("<td>-</td>");
+                    Integer totalVotesAgainstPlayer = 0;
+                    int latestVoteIndex = 0;
+                    for (int j = 0; j < allPlayers.size(); j++)
+                    {
+                        String currentPlayerToCheck = allPlayers.get(j);
+                        for (int k = 0; k < votes.size(); k++)
                         {
-                            int currentVote = votes.get(l).getVoteIndex();
-                            if (currentVote > latestVote)
+                            if (currentPlayerToCheck.equals(votes.get(k).getVotingId()))
                             {
-                                latestVote = currentVote;
+                                if (latestVoteIndex < votes.get(k).getVoteIndex())
+                                {
+                                    latestVoteIndex = votes.get(k).getVoteIndex();
+                                }
+                            }
+                        }    
+                    }
+                    for (int l = 0; l < votes.size(); l++)
+                        {
+                            if (votes.get(l).getVoteIndex() != latestVoteIndex)
+                            {
+                                out.println("<td><strike>" + votes.get(l).getVotingId() + " [" + votes.get(l).getVoteIndex() + "] </strike></td>");        
+                            }
+                            else
+                            {
+                                out.println("<td>" + votes.get(l).getVotingId() + " [" + votes.get(l).getVoteIndex() + "]</td>");
+                                totalVotesAgainstPlayer++;
                             }
                         }
-                       if (votes.get(j).getVoteIndex() != latestVote)
-                       {
-                           out.println("<td><strike>" + votes.get(j).getVotedId() + " [" + votes.get(j).getVoteIndex() + "] </strike></td>");    
-                       }
-                       else
-                       {
-                           out.println("<td>" + votes.get(j).getVotedId() + " [" + votes.get(j).getVoteIndex() + "]</td>");
-                       }
-                    }
+                    System.out.println("Total Votes Against " + allPlayers.get(i) + " is " + totalVotesAgainstPlayer);
+                    votesAgainst.put(allPlayers.get(i), totalVotesAgainstPlayer);
                 }
             }
             out.println("</table>");
+            session.setAttribute("votesAgainst", votesAgainst);
         } catch (SQLException ex) {
             Logger.getLogger(GamePageServlet.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Exception!");
