@@ -39,60 +39,34 @@ public class ShowVotesAgainstServlet extends HttpServlet {
             int currentRound = dao.getCurrentRound(gameId);
             ArrayList<String> allPlayers = dao.getPlayers(gameId);           
             PrintWriter out = response.getWriter();
-            // tally (needs strikethroughs when it's not current index)
+            // tally 
             out.println("<h5>Tally</h5>");
             out.println("<table>");
-            HashMap<String, Integer> votesAgainst = (HashMap<String, Integer>)session.getAttribute("votesAgainst");
             
-            /* THIS LOGIC IS NOT WORKING... REWORK! */
             for (int i = 0; i < allPlayers.size(); i++)
             {
                 String player = allPlayers.get(i);
                 ArrayList<Vote> votes = dao.getVotesAgainst(gameId, player, currentRound);
+                ArrayList<Vote> lastVotesAgainst = dao.getLastVotesAgainst(gameId, player, currentRound);
                 if (!votes.isEmpty())
                 {
                     out.println("<tr>");
                     out.println("<td>" + player + "</td>");
                     out.println("<td>-</td>");
-                    if (votesAgainst.containsKey(allPlayers.get(i)))
-                    {
-                        out.println("<td>" + votesAgainst.get(allPlayers.get(i)) + "</td>");
-                    }
+                    out.println("<td>" + lastVotesAgainst.size() + "</td>");
                     out.println("<td>-</td>");
-                    Integer totalVotesAgainstPlayer = 0;
-                    int latestVoteIndex = 0;
-                    for (int j = 0; j < allPlayers.size(); j++)
+                    for (int j = 0; j < lastVotesAgainst.size(); j++)
                     {
-                        String currentPlayerToCheck = allPlayers.get(j);
-                        for (int k = 0; k < votes.size(); k++)
-                        {
-                            if (currentPlayerToCheck.equals(votes.get(k).getVotingId()))
-                            {
-                                if (latestVoteIndex < votes.get(k).getVoteIndex())
-                                {
-                                    latestVoteIndex = votes.get(k).getVoteIndex();
-                                }
-                            }
-                        }    
+                        out.println("<td>" + lastVotesAgainst.get(j).getVotingId() + " [" + lastVotesAgainst.get(j).getVoteIndex() + "]</td>");
                     }
-                    for (int l = 0; l < votes.size(); l++)
-                        {
-                            if (votes.get(l).getVoteIndex() != latestVoteIndex)
-                            {
-                                out.println("<td><strike>" + votes.get(l).getVotingId() + " [" + votes.get(l).getVoteIndex() + "] </strike></td>");        
-                            }
-                            else
-                            {
-                                out.println("<td>" + votes.get(l).getVotingId() + " [" + votes.get(l).getVoteIndex() + "]</td>");
-                                totalVotesAgainstPlayer++;
-                            }
-                        }
-                    System.out.println("Total Votes Against " + allPlayers.get(i) + " is " + totalVotesAgainstPlayer);
-                    votesAgainst.put(allPlayers.get(i), totalVotesAgainstPlayer);
+                    votes.removeAll(lastVotesAgainst);
+                    for (int k = 0; k < votes.size(); k++)
+                    {
+                        out.println("<td><strike>" + votes.get(k).getVotingId() + " [" + votes.get(k).getVoteIndex() + "] </strike></td>");
+                    }
                 }
             }
             out.println("</table>");
-            session.setAttribute("votesAgainst", votesAgainst);
         } catch (SQLException ex) {
             Logger.getLogger(GamePageServlet.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Exception!");

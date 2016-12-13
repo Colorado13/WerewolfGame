@@ -914,6 +914,37 @@ public class DAO {
 
         return votes;
     }
+    
+    public ArrayList<Vote> getLastVotesAgainst(int gameId, String playerId, int currentRound) throws SQLException
+    {
+        ArrayList<Vote> votes = new ArrayList<>();
+
+        String query = "SELECT votingid, votedid, MAX(voteindex) from votes where gameround = " + currentRound + " and gameid = " + gameId + " AND votedid LIKE '" + playerId + "' GROUP BY votingid";
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try (Connection con = DriverManager.getConnection(host + database, username, password)) {
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+                Vote vote = new Vote();
+                vote.setGameId(gameId);
+                vote.setVotingId(rs.getString(1));
+                vote.setVotedId(rs.getString(2));
+                vote.setRound(currentRound);
+                vote.setVoteIndex(rs.getInt(3));
+                votes.add(vote);
+            }
+            con.close();
+        }
+
+        return votes;
+            
+    }
 
     public ArrayList<Integer> GetActiveGames() throws SQLException {
         ArrayList<Integer> myGames = new ArrayList<>();

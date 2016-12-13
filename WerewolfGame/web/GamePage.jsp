@@ -18,6 +18,7 @@
                         $('#DeadChatMessages').load('./GetDeadChatServlet');
                         $('#WwChatMessages').load('./GetWwChatServlet');
                         $('#ShowVotes').load('./ShowVotesServlet');
+                        $('#ShowVotesAgainst').load('./ShowVotesAgainstServlet');
                     });
                 }, 1000);
             });
