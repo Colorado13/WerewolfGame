@@ -30,8 +30,8 @@ public class NewMessage extends HttpServlet {
 
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        String text = request.getParameter("message");
-        String chat = request.getParameter("sendMessage");
+        String text = (String)request.getAttribute("message");
+        String chat = (String)request.getAttribute("sendMessage");
         Message message = new Message(user.getUsername(), text);
 
         ArrayList<Message> chatHistory;
@@ -55,10 +55,10 @@ public class NewMessage extends HttpServlet {
             case "gameMessage": {
 
                 String playerId = user.getUsername();
-                int gameId = Integer.parseInt(request.getParameter("gameId"));                
-                String role = request.getParameter("role");
-                String status = request.getParameter("status");
-                int currentRound = Integer.parseInt(request.getParameter("currentRound"));
+                int gameId = (int)request.getAttribute("gameId");                
+                String role = (String)request.getAttribute("role");
+                String status = (String)request.getAttribute("status");
+                int currentRound = (int)request.getAttribute("currentRound");
                 PlayerInstance playerInstance = new PlayerInstance(playerId, role, status, gameId, currentRound);
                 dao.AddMessage(message, gameId);
                 request.setAttribute("playerInstance", playerInstance);
@@ -69,10 +69,10 @@ public class NewMessage extends HttpServlet {
             case "wwMessage": {
 
                 String playerId = user.getUsername();                
-                int gameId = Integer.parseInt(request.getParameter("gameId"));                
-                String role = request.getParameter("role");
-                String status = request.getParameter("status");         
-                int currentRound = Integer.parseInt(request.getParameter("currentRound"));
+                int gameId = (int)request.getAttribute("gameId");                
+                String role = (String)request.getAttribute("role");
+                String status = (String)request.getAttribute("status");
+                int currentRound = (int)request.getAttribute("currentRound");
                 PlayerInstance playerInstance = new PlayerInstance(playerId, role, status, gameId, currentRound);
                 //System.out.println("Werewolf message in game: " + gameId);
                 dao.AddMessage(message, gameId, "werewolf");
@@ -84,10 +84,10 @@ public class NewMessage extends HttpServlet {
             case "deadMessage": {
 
                 String playerId = user.getUsername();                
-                int gameId = Integer.parseInt(request.getParameter("gameId"));                
-                String role = request.getParameter("role");
-                String status = request.getParameter("status");                
-                int currentRound = Integer.parseInt(request.getParameter("currentRound"));
+                int gameId = (int)request.getAttribute("gameId");                
+                String role = (String)request.getAttribute("role");
+                String status = (String)request.getAttribute("status");
+                int currentRound = (int)request.getAttribute("currentRound");
                 PlayerInstance playerInstance = new PlayerInstance(playerId, role, status, gameId, currentRound);
                 dao.AddMessage(message, gameId, "deadChat");
                 request.setAttribute("playerInstance", playerInstance);
