@@ -4,6 +4,15 @@
 	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	 version="3.1">
+    <filter>
+        <filter-name>ProfanityFilter</filter-name>
+        <filter-class>ca.werewolfgame.controllers.ProfanityFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ProfanityFilter</filter-name>
+        <servlet-name>NewMessage</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
     <servlet>
         <servlet-name>ShowVotesServlet</servlet-name>
         <servlet-class>ca.werewolfgame.controllers.ShowVotesServlet</servlet-class>
@@ -11,6 +20,22 @@
     <servlet-mapping>
         <servlet-name>ShowVotesServlet</servlet-name>
         <url-pattern>/ShowVotesServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>NewMessage</servlet-name>
+        <servlet-class>ca.werewolfgame.controllers.NewMessage</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>NewMessage</servlet-name>
+        <url-pattern>/NewMessage</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ShowVotesAgainstServlet</servlet-name>
+        <servlet-class>ca.werewolfgame.controllers.ShowVotesAgainstServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ShowVotesAgainstServlet</servlet-name>
+        <url-pattern>/ShowVotesAgainstServlet</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>GetGameChatServlet</servlet-name>

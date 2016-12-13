@@ -2,17 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/jpedr/Dropbox/JavaWorkspace/WerewolfGame/src/java/ca/werewolfgame/controllers/NewMessage.java</file>
-            <file>file:/C:/Users/jpedr/Dropbox/JavaWorkspace/WerewolfGame/src/java/ca/werewolfgame/controllers/GetGameChatServlet.java</file>
-            <file>file:/C:/Users/jpedr/Dropbox/JavaWorkspace/WerewolfGame/src/java/ca/werewolfgame/controllers/ShowVotesServlet.java</file>
-            <file>file:/C:/Users/jpedr/Dropbox/JavaWorkspace/WerewolfGame/src/java/ca/werewolfgame/controllers/GamePageServlet.java</file>
-            <file>file:/C:/Users/jpedr/Dropbox/JavaWorkspace/WerewolfGame/src/java/ca/werewolfgame/controllers/MyGames.java</file>
-            <file>file:/C:/Users/jpedr/Dropbox/JavaWorkspace/WerewolfGame/src/java/ca/werewolfgame/controllers/GoToGamePage.java</file>
-            <file>file:/C:/Users/jpedr/Dropbox/JavaWorkspace/WerewolfGame/src/java/ca/werewolfgame/controllers/LoginServlet.java</file>
-            <file>file:/C:/Users/jpedr/Dropbox/JavaWorkspace/WerewolfGame/src/java/ca/werewolfgame/controllers/ProcessRound.java</file>
-            <file>file:/C:/Users/jpedr/Dropbox/JavaWorkspace/WerewolfGame/src/java/ca/werewolfgame/dao/DAO.java</file>
-            <file>file:/C:/Users/jpedr/Dropbox/JavaWorkspace/WerewolfGame/src/java/ca/werewolfgame/controllers/ActionServlet.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
