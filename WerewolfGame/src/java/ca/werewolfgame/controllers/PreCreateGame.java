@@ -23,17 +23,16 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author jpedr
  */
-
+@WebServlet(name = "PreCreateGame", urlPatterns = {"/PreCreateGame"})
 public class PreCreateGame extends HttpServlet {
 
     @Override
-    protected void doGet (HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         DAO dao = new DAO();
         ArrayList<String> playerRoster;
         try {
             playerRoster = dao.getPlayers();
-            
             request.setAttribute("playerRoster", playerRoster);
             request.getRequestDispatcher("CreateGame.jsp").forward(request, response);
             

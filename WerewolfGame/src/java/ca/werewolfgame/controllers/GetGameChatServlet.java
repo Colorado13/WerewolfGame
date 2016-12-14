@@ -1,6 +1,7 @@
 package ca.werewolfgame.controllers;
 
 import ca.werewolfgame.beans.*;
+import ca.werewolfgame.customtags.ColourOwnMessages;
 import ca.werewolfgame.dao.*;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -56,11 +57,12 @@ public class GetGameChatServlet extends HttpServlet {
             out.println("<table>");
             for (int i = 0; i < gameChatHistory.size(); i++)
             {
-                out.println("<tr>");
-                out.println("<td>" + gameChatHistory.get(i).getUsername() + "</td>");
-                out.println("<td>>></td>");
-                out.println("<td>" + gameChatHistory.get(i).getMessage() + "</td>");
-                out.println("<tr>");
+                //out.println("<tr>");
+                //out.println("<td>" + gameChatHistory.get(i).getUsername() + "</td>");
+                //out.println("<td>>></td>");
+                //out.println("<td>" + gameChatHistory.get(i).getMessage() + "</td>");
+                //out.println("<tr>");
+                out.println("<ww:ColourOwnMessages playername='${user.username}' sender='gameChatHistory.get(i).getUsername()' message='gameChatHistory.get(i).getMessage()'/>");
             }
             out.println("</table>");
         } catch (SQLException ex) {

@@ -14,22 +14,6 @@
         <dispatcher>REQUEST</dispatcher>
     </filter-mapping>
     <servlet>
-        <servlet-name>MyGames</servlet-name>
-        <servlet-class>ca.werewolfgame.controllers.MyGames</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>MyGames</servlet-name>
-        <url-pattern>/MyGames</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>PreCreateGame</servlet-name>
-        <servlet-class>ca.werewolfgame.controllers.PreCreateGame</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>PreCreateGame</servlet-name>
-        <url-pattern>/PreCreateGame</url-pattern>
-    </servlet-mapping>
-    <servlet>
         <servlet-name>ShowVotesServlet</servlet-name>
         <servlet-class>ca.werewolfgame.controllers.ShowVotesServlet</servlet-class>
     </servlet>

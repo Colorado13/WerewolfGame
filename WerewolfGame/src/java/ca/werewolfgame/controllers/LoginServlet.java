@@ -48,7 +48,7 @@ public class LoginServlet extends HttpServlet {
                 }
 
                 if (existingUser) {
-                    //TODO Redirect to index page with username already take message
+                    //TODO Redirect to index page with username already taken message
                     response.sendRedirect("index.jsp");
                 } else {
                     dao.AddUser(user);

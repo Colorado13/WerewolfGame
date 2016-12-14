@@ -1,40 +1,60 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="WEB-INF/tlds/WwTagLib.tld" prefix="ww"%>
 <!DOCTYPE html>
 <html>
-    <head>
-        <link href="https://fonts.googleapis.com/css?family=Shadows+Into+Light" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="css/style.css">
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.0/jquery.min.js"></script>
-        <script src="script/script.js"></script>
-        <jsp:include page="Header.jsp">
-            <jsp:param name="navigation" value ="<a href=\"\WerewolfGame\MainPage.jsp\">Main Page</a></li>
-                       <li><a href=\"\WerewolfGame\MyGames\">MyGames</a></li>
-                       <li><a href=\"#\">My Stats</a></li>
-                       <li><a href=\"\WerewolfGame\PreCreateGame\">Create Game</a></li>
-                      <li><a href=\"index.jsp\">Logout</a></li>" />
+    <jsp:include page="Header.jsp">
+            <jsp:param name="navigation" value ="<li><a href=\"#\">Main Page</a></li>
+                    <li><a href=\"#\">MyGames</a></li>
+                    <li><a href=\"#\">My Stats</a></li>
+                    <li><a href=\"#\">Create Game</a></li>
+                    <li><a href=\"#\">Logout</a></li>" />
         </jsp:include>
-    <div class="main-container">
-        <div class="mainchat">
-            <h2>Game Chat</h2>
-            <div id="GameChatMessages">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.0/jquery.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                window.setInterval(function () {// set time limit for AJAX call
+                    $(function () {
+                        $('#GameChatMessages').load('./GetGameChatServlet');
+                        $('#DeadChatMessages').load('./GetDeadChatServlet');
+                        $('#WwChatMessages').load('./GetWwChatServlet');
+                        $('#ShowVotes').load('./ShowVotesServlet');
+                        $('#ShowVotesAgainst').load('./ShowVotesAgainstServlet');
+                    });
+                }, 1000);
+            });
+        </script>
+        
+        <
+
+                <h1>Game Page</h1>
+                <h2>Welcome ${user.username}</h2>
+                <h3>This is Game ${playerInstance.gameId}</h3>
+                <h3>Current round is ${playerInstance.currentRound}</h3>
+                <h3>In this game you are a ${playerInstance.role}</h3>
+                <h3>You are currently ${playerInstance.status}</h3>
+            <div class="Container">
+
+            <div class="GameChat">
+                <h2>Game Chat</h2>
+                <div id="GameChatMessages">
+                </div>
+                <div id="GameChatInput">
+                    <c:if test="${playerInstance.status == 'ALIVE'}">
+                        <form method="post" action="NewMessage">
+                            Message: <input type="text" name="message" /><br>
+                            <!-- maybe our custom tags...? -->
+                            <input type="hidden" name="gameId" value="${playerInstance.gameId}"/>
+                            <input type="hidden" name="role" value="${playerInstance.role}" />
+                            <input type="hidden" name="status" value="${playerInstance.status}" />
+                            <input type="hidden" name="currentRound" value="${playerInstance.currentRound}"/>
+                            <button type="submit" name="sendMessage" value="gameMessage">Send</button><br>
+                        </form>
+                    </c:if>
+                </div>
             </div>
-            <div id="GameChatInput">
-                <c:if test="${playerInstance.status == 'ALIVE'}">
-                    <form method="post" action="NewMessage">
-                        Message: <input type="text" name="message" /><br>
-                        <!-- maybe our custom tags...? -->
-                        <input type="hidden" name="gameId" value="${playerInstance.gameId}"/>
-                        <input type="hidden" name="role" value="${playerInstance.role}" />
-                        <input type="hidden" name="status" value="${playerInstance.status}" />
-                        <input type="hidden" name="currentRound" value="${playerInstance.currentRound}"/>
-                        <button type="submit" name="sendMessage" value="gameMessage">Send</button><br>
-                    </form>
-                </c:if>
-            </div>
-        </div>
-        <div class="right-screen">
-            <div class="sidechat">
+            <div id="SideWindow">
+
                 <c:choose>
                     <c:when test="${playerInstance.status == 'DEAD'}">
                         <div class="Dead Chat" id="SideChat">
@@ -76,56 +96,25 @@
                         </c:if>
                     </c:otherwise>
                 </c:choose>
-            </div>
-            <div class="gameactions">
-                <div class="gameinfo">
-                    <h2>Welcome ${user.username}</h2>
-                    <h3>This is Game ${playerInstance.gameId}</h3>
-                    <h3>Current round is ${playerInstance.currentRound}</h3>
-                    <h3>In this game you are a ${playerInstance.role}</h3>
-                    <h3>You are currently ${playerInstance.status}</h3>
-                </div>
-                <h2>Votes</h2>
-                <div class="tally">
-                    <div id="ShowVotesAgainst">
+                <div id="GameInfo">
+                    <div id="Votes">
+                        <h2>Votes</h2>
+                        <div id="ShowVotesAgainst">
+                        </div>
+                        <div id="ShowVotes">
+                        </div>
                     </div>
-                </div>
-                <div class="inverted-tally">
-                    <div id="ShowVotes">
-                    </div>      
-                </div>
-                <div class="actions">
-                    <h2>Actions</h2>
-                    <c:choose>
-                        <c:when test="${playerInstance.status == 'ALIVE'}">
-                            <!-- Vote selection -->
-                            <div id="VoteForm">
-                                <form method="post" action="ActionServlet" >
-                                    Choose player to vote:
-                                    <select name="selectedPlayer">
-                                        <option value="Players" disabled selected>
-                                            <c:forEach items="${alivePlayers}" var="player">
-                                            <option value="${player}">${player}</option>
-                                        </c:forEach>
-                                    </select>
-                                    <input type="hidden" name="gameId" value="${playerInstance.gameId}"/>
-                                    <input type="hidden" name="role" value="${playerInstance.role}" />
-                                    <input type="hidden" name="status" value="${playerInstance.status}" />
-                                    <input type="hidden" name="currentRound" value="${playerInstance.currentRound}"/>
-                                    <input type="submit" name="action" value="Vote!"/>
-                                    <input type="submit" name="action" value="Nightfall!"/>
-                                </form>
-                            </div>
-
-
-                            <c:if test="${playerInstance.role == 'werewolf'}">
-                                <!-- Werewolf kill selection -->
-                                <div id="KillOrderForm">
-                                    <form method="post" action="ActionServlet">
-                                        Choose who dies:
+                    <div id="Actions">
+                        <h2>Actions</h2>
+                        <c:choose>
+                            <c:when test="${playerInstance.status == 'ALIVE'}">
+                                <!-- Vote selection -->
+                                <div id="VoteForm">
+                                    <form method="post" action="ActionServlet" >
+                                        Choose player to vote:
                                         <select name="selectedPlayer">
-                                            <option value="Villagers" disabled selected>
-                                                <c:forEach items="${aliveVillagers}" var="player">
+                                            <option value="Players" disabled selected>
+                                                <c:forEach items="${alivePlayers}" var="player">
                                                 <option value="${player}">${player}</option>
                                             </c:forEach>
                                         </select>
@@ -133,15 +122,46 @@
                                         <input type="hidden" name="role" value="${playerInstance.role}" />
                                         <input type="hidden" name="status" value="${playerInstance.status}" />
                                         <input type="hidden" name="currentRound" value="${playerInstance.currentRound}"/>
-                                        <input type="submit" name="action" value="Kill!"/>
+                                        <input type="submit" name="action" value="Vote!"/>
+                                        <input type="submit" name="action" value="Nightfall!"/>
                                     </form>
                                 </div>
-                            </c:if>
-                        </c:when>
-                    </c:choose>
+
+
+                                <c:if test="${playerInstance.role == 'werewolf'}">
+                                    <!-- Werewolf kill selection -->
+                                    <div id="KillOrderForm">
+                                        <form method="post" action="ActionServlet">
+                                            Choose who dies:
+                                            <select name="selectedPlayer">
+                                                <option value="Villagers" disabled selected>
+                                                    <c:forEach items="${aliveVillagers}" var="player">
+                                                    <option value="${player}">${player}</option>
+                                                </c:forEach>
+                                            </select>
+                                            <input type="hidden" name="gameId" value="${playerInstance.gameId}"/>
+                                            <input type="hidden" name="role" value="${playerInstance.role}" />
+                                            <input type="hidden" name="status" value="${playerInstance.status}" />
+                                            <input type="hidden" name="currentRound" value="${playerInstance.currentRound}"/>
+                                            <input type="submit" name="action" value="Kill!"/>
+                                        </form>
+                                    </div>
+                                </c:if>
+                            </c:when>
+                        </c:choose>
+                    </div>
+                    <div id="BackButton">
+                        <form method="get" action="MainPage.jsp">
+                            <input type="submit" value="Back">
+                        </form>
+                    </div>
+
                 </div>
+
+
+
             </div>
         </div>
-    </div>
-</body>
+
+    </body>
 </html>

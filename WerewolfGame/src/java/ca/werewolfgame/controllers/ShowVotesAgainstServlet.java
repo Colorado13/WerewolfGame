@@ -24,19 +24,31 @@ public class ShowVotesAgainstServlet extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             DAO dao = new DAO();
-
-            int gameId = (int)(session.getAttribute("currentGameId"));
-            String playerId = ((User) request.getSession().getAttribute("user")).getUsername();
-            
             PlayerInstance playerInstance = new PlayerInstance();
-
+            int gameId = 0;
+            String playerId = "Player";
+            String role = "role";
+            String status = "status";
+            int currentRound = 0;
+            
+            if (session.getAttribute("currentGameId") != null) {
+                gameId = (int) (session.getAttribute("currentGameId"));
+            }
+            if (request.getSession().getAttribute("user") != null) {
+                playerId = ((User) request.getSession().getAttribute("user")).getUsername();
+            }
+            if (dao.getRole(gameId, playerId) != null) {
+                role = dao.getRole(gameId, playerId);
+            }
+            if (dao.getCurrentRound(gameId) != 0) {
+                currentRound = dao.getCurrentRound(gameId);
+            }
             playerInstance.setPlayerId(playerId);
-            playerInstance.setRole(dao.getRole(gameId, playerId));
-            playerInstance.setStatus(dao.getStatus(gameId, playerId));
-            playerInstance.setCurrentRound(dao.getCurrentRound(gameId));
+            playerInstance.setRole(role);
+            playerInstance.setStatus(status);
+            playerInstance.setCurrentRound(currentRound);
             playerInstance.setGameId(gameId);
             
-            int currentRound = dao.getCurrentRound(gameId);
             ArrayList<String> allPlayers = dao.getPlayers(gameId);           
             PrintWriter out = response.getWriter();
             // tally 
@@ -46,9 +58,25 @@ public class ShowVotesAgainstServlet extends HttpServlet {
             for (int i = 0; i < allPlayers.size(); i++)
             {
                 String player = allPlayers.get(i);
-                ArrayList<Vote> votes = dao.getVotesAgainst(gameId, player, currentRound);
-                ArrayList<Vote> lastVotesAgainst = dao.getLastVotesAgainst(gameId, player, currentRound);
-                if (!votes.isEmpty())
+                ArrayList<Vote> lastVotes = dao.getLastVotes(gameId, currentRound);
+                ArrayList<Vote> allVotes = dao.getAllVotes(gameId, currentRound);
+                ArrayList<Vote> lastVotesAgainst = new ArrayList<>();
+                ArrayList<Vote> allVotesAgainst = new ArrayList<>();
+                for (int b = 0; b < lastVotes.size(); b++)
+                {
+                    if (lastVotes.get(b).getVotedId().equals(player))
+                    {
+                        lastVotesAgainst.add(lastVotes.get(b));
+                    }
+                }
+                for (int l = 0; l < allVotes.size(); l++)
+                {
+                    if (allVotes.get(l).getVotedId().equals(player))
+                    {
+                        allVotesAgainst.add(allVotes.get(l));
+                    }
+                }
+                if (!allVotes.isEmpty())
                 {
                     out.println("<tr>");
                     out.println("<td>" + player + "</td>");
@@ -59,10 +87,10 @@ public class ShowVotesAgainstServlet extends HttpServlet {
                     {
                         out.println("<td>" + lastVotesAgainst.get(j).getVotingId() + " [" + lastVotesAgainst.get(j).getVoteIndex() + "]</td>");
                     }
-                    votes.removeAll(lastVotesAgainst);
-                    for (int k = 0; k < votes.size(); k++)
+                    allVotesAgainst.removeAll(lastVotesAgainst);
+                    for (int k = 0; k < allVotesAgainst.size(); k++)
                     {
-                        out.println("<td><strike>" + votes.get(k).getVotingId() + " [" + votes.get(k).getVoteIndex() + "] </strike></td>");
+                        out.println("<td><strike>" + allVotesAgainst.get(k).getVotingId() + " [" + allVotesAgainst.get(k).getVoteIndex() + "] </strike></td>");
                     }
                 }
             }
@@ -71,7 +99,5 @@ public class ShowVotesAgainstServlet extends HttpServlet {
             Logger.getLogger(GamePageServlet.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Exception!");
         }
-
     }
-
 }
