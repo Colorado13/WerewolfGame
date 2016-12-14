@@ -47,8 +47,8 @@ public class GameRunner extends HttpServlet {
                         game.setPlayerCount(dao.getPlayerCount(game.getGameId()));
                         game.setGameStatus("active");
                         System.out.println("Elapsed Time: " + dao.getElapsedTime(game.getGameId()));
-                        //if (dao.getElapsedTime(game.getGameId()) >= GameParameters.getRoundDuration) {
-                        if (true) {
+                        if (dao.getElapsedTime(game.getGameId()) >= GameParameters.getRoundDuration) {
+                        //if (true) {
                             int werewolves = 0;
                             ArrayList<String> playerIds = dao.getPlayers(game.getGameId());
                             dao.lynchPlayer(game.getGameId(), game.getCurrentRound());
