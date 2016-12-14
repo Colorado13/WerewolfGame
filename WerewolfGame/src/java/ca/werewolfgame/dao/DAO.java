@@ -892,7 +892,7 @@ public class DAO {
     public ArrayList<Vote> getLastVotes(int gameId, int currentRound) throws SQLException {
         ArrayList<Vote> votes = new ArrayList<>();
 
-        String query = "SELECT votingid ,votedid, MAX(voteindex) from votes where gameround = " + currentRound + " and gameid = " + gameId + " GROUP BY votingid";
+        String query = "select v.votingid, v.votedid, v.voteindex from votes v inner join (select votingid, MAX(voteindex) as latestVote from votes group by votingid) tm on v.votingid = tm.votingid and v.voteindex = tm.latestVote where gameround = " + currentRound + " and gameid = " + gameId + " GROUP BY votingid";
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -910,6 +910,35 @@ public class DAO {
                 vote.setVotedId(rs.getString(2));
                 vote.setRound(currentRound);
                 vote.setVoteIndex(rs.getInt(3));
+                votes.add(vote);
+            }
+            con.close();
+        }
+
+        return votes;
+    }
+    
+    public ArrayList<Vote> getAllVotes(int gameId, int currentRound) throws SQLException {
+        ArrayList<Vote> votes = new ArrayList<>();
+
+        String query = "SELECT * from votes where gameround = " + currentRound + " and gameid = " + gameId + " GROUP BY votingid";
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try (Connection con = DriverManager.getConnection(host + database, username, password)) {
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+                Vote vote = new Vote();
+                vote.setGameId(gameId);
+                vote.setVotingId(rs.getString(2));
+                vote.setVotedId(rs.getString(3));
+                vote.setRound(currentRound);
+                vote.setVoteIndex(rs.getInt(5));
                 votes.add(vote);
             }
             con.close();

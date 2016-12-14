@@ -56,12 +56,12 @@ public class GetDeadChatServlet extends HttpServlet {
             out.println("<table>");
             for (int i = 0; i < DeadChatHistory.size(); i++)
             {
-                //out.println("<tr>");
-                //out.println("<td>" + DeadChatHistory.get(i).getUsername() + "</td>");
-                //out.println("<td>>></td>");
-                //out.println("<td>" + DeadChatHistory.get(i).getMessage() + "</td>");
-                //out.println("<tr>");
-                out.println("<ww:ColourOwnMessages playername='${user.username}' sender='DeadChatHistory.get(i).getUsername()' message='DeadChatHistory.get(i).getMessage()'/>");
+                out.println("<tr>");
+                out.println("<td>" + DeadChatHistory.get(i).getUsername() + "</td>");
+                out.println("<td>>></td>");
+                out.println("<td>" + DeadChatHistory.get(i).getMessage() + "</td>");
+                out.println("<tr>");
+                //out.println("<ww:ColourOwnMessages playername='${user.username}' sender='DeadChatHistory.get(i).getUsername()' message='DeadChatHistory.get(i).getMessage()'/>");
             }
             out.println("</table>");
         } catch (SQLException ex) {
