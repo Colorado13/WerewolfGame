@@ -44,7 +44,7 @@ public class ColourOwnMessages extends SimpleTagSupport
         System.out.println("Custom Tag Code Running...");
         if (playername.equals(sender))
         {
-            out.println("<tr style='color:blue'>");
+            out.println("<tr style=\"color:blue\">");
             out.println("<td>" + sender + "</td>");
             out.println("<td>>></td>");
             out.println("<td>" + message + "</td>");

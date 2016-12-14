@@ -24,11 +24,11 @@ import javax.servlet.http.HttpSession;
  *
  * @author jpedr
  */
-@WebServlet(name = "MyGames", urlPatterns = {"/MyGames"})
+
 public class MyGames extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
