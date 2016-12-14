@@ -48,8 +48,8 @@ public class LoginServlet extends HttpServlet {
                 }
 
                 if (existingUser) {
-                    //TODO Redirect to index page with username already taken message
-                    response.sendRedirect("index.jsp");
+                    request.setAttribute("loginMessage", "Username Already Taken!");
+                    request.getRequestDispatcher("index.jsp").forward(request, response);
                 } else {
                     dao.AddUser(user);
                     session.setAttribute("user", user);
@@ -79,6 +79,9 @@ public class LoginServlet extends HttpServlet {
                                 request.setAttribute("chatHistory", chatHistory);
                                 request.getRequestDispatcher("MainPage.jsp").forward(request, response);
                             }
+                        } else {
+                            request.setAttribute("loginMessage", "Wrong Login/Password");
+                            request.getRequestDispatcher("index.jsp").forward(request, response);
                         }
 
                     }

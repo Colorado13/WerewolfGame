@@ -62,7 +62,8 @@ public class GetGameChatServlet extends HttpServlet {
                 //out.println("<td>>></td>");
                 //out.println("<td>" + gameChatHistory.get(i).getMessage() + "</td>");
                 //out.println("<tr>");
-                out.println("<ww:ColourOwnMessages playername='${user.username}' sender='gameChatHistory.get(i).getUsername()' message='gameChatHistory.get(i).getMessage()'/>");
+                //System.out.println("<ww:ColourOwnMessages playername=\"${user.username}\" sender=\"gameChatHistory.get(i).getUsername()\" message=\"gameChatHistory.get(i).getMessage()\"/>");
+                out.println("<ww:ColourOwnMessages playername=\"${user.username}\" sender=\"gameChatHistory.get(i).getUsername()\" message=\"gameChatHistory.get(i).getMessage()\"/>");
             }
             out.println("</table>");
         } catch (SQLException ex) {
