@@ -1,11 +1,3 @@
 TODO List:
-idea for custom tag: when there is a "System" message on the game chat "Player has died" make it appear in red, also for nightfall and lynching
+
 Create Security Roles
-Create Header page
-Create Custom JSTL TAG
-Make the Chat dynamic
-Create main game page (HTML+CSS)
-Create message when user already exists
-Create message when password is incorrect
-Add option to go to current games on main page
-Send back to create game page if less than 5 checkboxes are selected
