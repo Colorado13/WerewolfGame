@@ -35,42 +35,41 @@ public class GameRunner extends HttpServlet {
         while (true) {
             try {
                 ArrayList<Integer> activeGames = dao.GetActiveGames();
-                
+
                 for (int i = 0; i < activeGames.size(); i++) {
                     try {
                         System.out.println("Checking game: " + activeGames.get(i));
-                        
+
                         Game game = new Game();
-                        
+
                         game.setGameID(activeGames.get(i));
                         game.setCurrentRound(dao.getCurrentRound(game.getGameId()));
                         game.setPlayerCount(dao.getPlayerCount(game.getGameId()));
                         game.setGameStatus("active");
                         System.out.println("Elapsed Time: " + dao.getElapsedTime(game.getGameId()));
                         //if (dao.getElapsedTime(game.getGameId()) >= GameParameters.getRoundDuration) {
-                            if (true) {
+                        if (true) {
                             int werewolves = 0;
                             ArrayList<String> playerIds = dao.getPlayers(game.getGameId());
                             dao.lynchPlayer(game.getGameId(), game.getCurrentRound());
                             System.out.println("Lynching Player");
                             for (int j = 0; j < playerIds.size(); j++) {
-                                System.out.println("Player: " + playerIds.get(j) + " role: "  + dao.getRole(game.getGameId(), playerIds.get(j)));
+                                System.out.println("Player: " + playerIds.get(j) + " role: " + dao.getRole(game.getGameId(), playerIds.get(j)));
                                 if (dao.getRole(game.getGameId(), playerIds.get(j)).equals("werewolf")) {
                                     werewolves++;
-                                } 
+                                }
                             }
                             System.out.println("Alive werewolves: " + werewolves);
                             String check = GameChecker.checkEndGame(game, werewolves);
-                            
-                            if(!check.equals("none"))
-                            {
+
+                            if (!check.equals("none")) {
                                 dao.endGame(game.getGameId(), check);
                             }
-                            
+
                             dao.killPlayer(game.getGameId(), game.getCurrentRound());
-                            
+
                             System.out.println("Killing Player");
-                            
+
                             playerIds = dao.getPlayers(game.getGameId());
                             werewolves = 0;
                             for (int j = 0; j < playerIds.size(); j++) {
@@ -78,21 +77,21 @@ public class GameRunner extends HttpServlet {
                                     werewolves++;
                                 }
                             }
-                            
+
                             System.out.println("Checking for endgame");
-                            
+
                             check = GameChecker.checkEndGame(game, werewolves);
-                            if(!check.equals("none"))
-                            {
+
+                            if (!check.equals("none")) {
                                 dao.endGame(game.getGameId(), check);
-                                System.out.println("Increasing Round");
-                                dao.increaseRound(game.getGameId());
+
                             }
-                            
-                            
-                            
+
+                            System.out.println("Increasing Round");
+                            dao.increaseRound(game.getGameId());
+
                         }
-                        
+
                     } catch (SQLException | ClassNotFoundException ex) {
                         Logger.getLogger(GameRunner.class.getName()).log(Level.SEVERE, null, ex);
                     }

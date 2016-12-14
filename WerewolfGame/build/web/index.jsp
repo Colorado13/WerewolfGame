@@ -14,9 +14,8 @@
                     <li><a href=\"#\">Create Game</a></li>
                     <li><a href=\"#\">Logout</a></li>" />
         </jsp:include>
-        <h1>Werewolf Game</h1>
-        <h1>Login Page</h1>
-        <div class="MainDiv">
+        
+        <div class="main-container">
             <h2>Login</h2>
             <form method="post" action="LoginServlet">
                 Name: <input type="text" name="name" /><br>

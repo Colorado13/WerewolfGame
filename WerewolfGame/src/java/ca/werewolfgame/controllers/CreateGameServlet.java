@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 public class CreateGameServlet extends HttpServlet {
     
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost (HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             String[] players = request.getParameterValues("player");
@@ -35,6 +35,8 @@ public class CreateGameServlet extends HttpServlet {
             System.out.println(gameID);
             HashMap<String, String> gameSetup = gameCreator.setupGame(players, playerCount);
             dao.createGame(gameID, players, gameSetup);
+            
+            response.sendRedirect("MyGames");
             
             
             
