@@ -12,3 +12,5 @@ Play the game using any of the Players (Player1, Player2, Player 3, etc) with th
 Living players that are on the good side have a main chat and the ability to vote in other (alive) players.
 Living players that are on the werewolf, or evil, side have the main chat, the ability to vote and also the ability to choose a victim for the night. 
 Dead players can see the main chat, but not enter any messages, and also have access to a dead chat, where they can discuss the game with other dead players.
+GitHub Link
+https://github.com/Colorado13/WerewolfGame
