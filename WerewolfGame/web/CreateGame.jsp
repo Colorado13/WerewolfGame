@@ -5,21 +5,14 @@
 <html>
 
     <jsp:include page="Header.jsp">
-        <jsp:param name="navigation" value ="<li><a href=\"#\">Main Page</a></li>
-                   <li><a href=\"#\">MyGames</a></li>
+        <jsp:param name="navigation" value ="<li><a href=\"\WerewolfGame\MainPage.jsp\">Main Page</a></li>
+                   <li><a href=\"\WerewolfGame\MyGames\">MyGames</a></li>
                    <li><a href=\"#\">My Stats</a></li>
-                   <li class=\"active\"><a href=\"#\">Create Game</a></li>
-                   <li><a href=\"#\">Logout</a></li>" />
+                   <li class=\"active\"><a href=\"\WerewolfGame\PreCreateGame\">Create Game</a></li>
+                   <li><a href=\"index.jsp\">Logout</a></li>" />
     </jsp:include>
-    <script language="JavaScript">
-        function toggle(source) {
-            checkboxes = document.getElementsByName('player');
-            for (var i = 0, n = checkboxes.length; i < n; i++) {
-                checkboxes[i].checked = source.checked;
-            }
-        }
-    </script>
-    <div class="MainDiv">
+   <script src="script/script.js"></script>
+    <div class="main-container">
         <h1>Create Game!</h1>
         <form method="post" action="CreateGameServlet" onsubmit="selectAll">
             <div>

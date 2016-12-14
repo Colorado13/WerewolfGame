@@ -375,8 +375,11 @@ public class DAO {
             ResultSet rs = st.executeQuery(query);
 
             while (rs.next()) {
-
-                userRoster.add(rs.getString(1));
+                if(!rs.getString(1).equals("SYSTEM"))
+                {
+                    userRoster.add(rs.getString(1));
+                }
+                
             }
             con.close();
         }

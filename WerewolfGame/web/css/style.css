@@ -1,0 +1,214 @@
+@import url("reset.css");
+            @import url("global-forms.css");
+
+            body {
+                background-color:black;
+                color:white;
+            }
+            .post-container {
+                margin: 20px 200px 0 0;  
+                overflow: auto;
+            }
+            .post-thumb {
+                float: left;
+            }
+            .post-thumb img {
+                display: block;
+            }
+            .post-content {
+                margin-left: 210px
+            }
+            .post-title {
+                font-weight: bold;
+                font-size: 200%
+            }
+            a {
+                outline: 0;
+            }
+            a:link, a:visited {
+                color: #C74350;
+                padding: 0 1px;
+                text-decoration: underline;
+            }
+            a:hover, a:active {
+                background-color: #C74350;
+                color: #fff;
+                text-decoration: none;
+                text-shadow: 1px 1px 1px #333;
+            }
+
+            header h1 {
+                font-family: 'Shadows Into Light', cursive;
+                font-size: 3.571em;
+                line-height: .6;
+                color:red;
+                display: flex;
+                justify-content: center
+                
+            }
+            header h2 {
+                font-family: Verdana;
+                font-size: 1.0em;
+                line-height: .6;
+                color:red;
+                display: flex;
+                justify-content: center;
+            }
+
+            nav h1 a:link, nav h1 a:visited {
+                color: #000305;
+                display: block;
+                font-weight: bold;
+                margin: 0 0 .6em .2em;
+                text-decoration: none;
+                width: 427px;
+                float: right;
+                color: red;
+            }
+            nav h1 a:hover, h1 a:active {
+                background: none;
+                color: #C74350;
+                text-shadow: none;
+            }
+            nav {
+                background: darkgrey;
+                font-size: 1.143em;
+                height: 40px;
+                line-height: 30px;
+                margin: 100px auto 2em auto;
+                padding: 0;
+                text-align: center;
+                font-family: Verdana;
+
+
+                border-radius: 5px;
+                -moz-border-radius: 5px;
+                -webkit-border-radius: 5px;
+            }
+            nav ul {
+                list-style: none; 
+                margin: 0 auto; 
+
+            }
+            nav li {
+                float: left; 
+                display: inline;
+                margin: 0;
+            }
+
+            nav a:link, nav a:visited {
+                color: #fff;
+                display: inline-block;
+                height: 30px;
+                padding: 5px 1.5em;
+                text-decoration: none;
+            }
+            nav a:hover, nav a:active,
+            nav .active a:link, #banner nav .active a:visited {
+                background: #C74451;
+                color: #fff;
+                text-shadow: none !important;
+            }
+
+            nav li:first-child a {
+                border-top-left-radius: 5px;
+                -moz-border-radius-topleft: 5px;
+                -webkit-border-top-left-radius: 5px;
+
+                border-bottom-left-radius: 5px;
+                -moz-border-radius-bottomleft: 5px;
+                -webkit-border-bottom-left-radius: 5px;
+            }
+            nav li:last-child a {
+                border-top-right-radius: 5px;
+                -moz-border-radius-topright: 5px;
+                -webkit-border-top-right-radius: 5px;
+
+                border-bottom-right-radius: 5px;
+                -moz-border-radius-bottomright: 5px;
+                -webkit-border-bottom-right-radius: 5px;
+            }
+            .main-container {
+                border-style: solid;
+                border-width: 1px;
+                box-sizing: border-box;
+                height: 1000px;
+                font-family: Verdana;
+
+            }	
+            .mainchat {
+                float:left;
+                display: inline-block;
+
+                width: 50%;
+                height: 100%;
+
+                border-style: solid;
+                border-width: 1px;
+                box-sizing: border-box;
+
+            }
+            .right-screen {
+                float:right;
+                display: inline-block;
+
+                width: 50%;
+                height: 100%;
+
+                border-style: solid;
+                border-width: 1px;
+                box-sizing: border-box;
+
+            }
+            .sidechat {
+                float:left;
+                display: inline-block;
+
+                width: 50%;
+                height: 100%;
+
+                border-style: solid;
+                border-width: 1px;
+                box-sizing: border-box;
+            }
+            .gameactions {
+                float:right;
+                display: inline-block;
+
+                width: 50%;
+                height: 100%;
+
+                border-style: solid;
+                border-width: 1px;
+                box-sizing: border-box;
+
+            }
+            .gameinfo {
+                line-height: 100%;
+                display: block;
+				text-align: center;
+                width: 100%;
+                height: 15%;
+            }
+            .tally {
+                display: block;
+
+                width: 100%;
+                height: 25%;
+            }
+            .inverted-tally {
+                display: block;
+
+                width: 100%;
+                height: 25%;
+            }
+            .actions {
+                display: block;
+
+                width: 100%;
+                height: 20%;
+            }
+			.login
+			{
+				text-align: center;
+			}
